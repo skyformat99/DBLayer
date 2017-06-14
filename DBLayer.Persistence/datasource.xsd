@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema id="datasources" elementFormDefault="qualified"
+           targetNamespace='urn:datasources' xmlns='urn:datasources'
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:annotation>
+    <xs:documentation>
+      Adom XML Schema Definition
+    </xs:documentation>
+  </xs:annotation>
+  <xs:element name="atom-datasource">
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+      <xs:attribute name="connectionString" type="xs:string" use="required"/>
+      <xs:attribute name="provider" type="xs:string" use="required"/>
+      <xs:attribute name="property" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="datasources">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="atom-datasource" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:annotation>
+    <xs:documentation>
+      The document root.
+    </xs:documentation>
+  </xs:annotation>
+  <xs:element name="datasource">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="datasources" minOccurs="1" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
