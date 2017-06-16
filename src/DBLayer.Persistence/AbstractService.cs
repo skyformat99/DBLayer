@@ -33,7 +33,7 @@ namespace DBLayer.Persistence
         public IPagerGenerator ThePagerGenerator { get; set; }
         #endregion
         public AbstractService() { }
-        public AbstractService(DataSource dataSource) 
+        public AbstractService(IDataSource dataSource) 
         {
             base.DbProvider = dataSource.DbProvider;
             base.ConnectionString = dataSource.ConnectionString;
@@ -1371,12 +1371,7 @@ namespace DBLayer.Persistence
             var para = paramerList.ToArray();
             if (newID == null)
             {
-                //var cmdText = ThePagerGenerator.GetInsertCmdText<T>(this, ref paramerList, insertCmd);
                 newID = ThePagerGenerator.InsertExecutor<T>(this, insertCmd, paramerList, trans);
-                //newID =
-                //        (trans == null
-                //        ? base.ExecuteScalar(cmdText.ToString(), CommandType.Text, para)
-                //        : base.ExecuteScalar(trans, cmdText.ToString(), CommandType.Text, para));
             }
             else {
                 if (trans == null)
@@ -1419,10 +1414,6 @@ namespace DBLayer.Persistence
             if (newID == null)
             {
                 result=ThePagerGenerator.InsertExecutorAsync<T>(this, insertCmd, paramerList, trans);
-                //var cmdText = ThePagerGenerator.GetInsertCmdText<T>(this, ref paramerList, insertCmd);
-                //result = trans == null ?
-                //    base.ExecuteScalarAsync(cmdText.ToString(), CommandType.Text, paramerList.ToArray()) :
-                //    base.ExecuteScalarAsync(trans, cmdText.ToString(), CommandType.Text, paramerList.ToArray());
             }
             else
             {
@@ -2783,7 +2774,7 @@ namespace DBLayer.Persistence
             var dataTable = entityType.GetDataTableAttribute(out tableName);
 
 
-            var cmdText = string.Format("INSERT INTO {0} ", tableName);
+            var cmdText = $"INSERT INTO {tableName} ";
 
             return cmdText;
         }
@@ -2835,7 +2826,7 @@ namespace DBLayer.Persistence
                 sqlValues.Length = sqlValues.Length - 1;
             }
 
-            cmdText = string.Format("DELETE FROM {0} WHERE {1}", tableName, sqlValues);
+            cmdText = $"DELETE FROM {tableName} WHERE {sqlValues}";
 
             return paramerList;
         }
@@ -2915,7 +2906,7 @@ namespace DBLayer.Persistence
                 sqlValues.Length = sqlValues.Length - 1;
             }
 
-            cmdText = string.Format("UPDATE {0} SET {1} WHERE {2} ", tableName, sqlFields, sqlValues);
+            cmdText = $"UPDATE {tableName} SET {sqlFields} WHERE {sqlValues} ";
 
             return paramerList;
         }
@@ -2934,44 +2925,11 @@ namespace DBLayer.Persistence
             var dataTable = entityType.GetDataTableAttribute(out tableName);
 
 
-            var cmdText = string.Format("UPDATE {0} SET ", tableName);
+            var cmdText = $"UPDATE {tableName} SET ";
 
             return cmdText;
         }
-        /// <summary>
-        /// 生成添加SQL语句
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        private string CreateSelectAllSql<T>(string top="")
-        {
-            var entityType = typeof(T);
-            var tableName = string.Empty; ;
-            var dataTable = entityType.GetDataTableAttribute(out tableName);
-
-            var cmdText = string.Format("SELECT {1} * FROM {0} ", tableName, top);
-            return cmdText;
-        }
-
-        /// <summary>
-        /// 生成添加SQL语句
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        private string CreateSelectAllEntityDicSql<T>(string top="",params string[] exclusionList)
-        {
-            var entityType = typeof(T);
-            var tableName = string.Empty; ;
-            var dataTable = entityType.GetDataTableAttribute(out tableName);
-
-            var fields = CreateAllEntityDicSql<T>(exclusionList);
-            var cmdText = string.Format("SELECT {2} {1} FROM {0} ", tableName, fields, top);
-
-            return cmdText;
-        }
-
+        
         private string CreateAllEntityDicSql<T>(params string[] exclusionList) 
         {
 
@@ -3017,7 +2975,7 @@ namespace DBLayer.Persistence
             var dataTable = entityType.GetDataTableAttribute(out tableName);
 
 
-            var cmdText = string.Format("DELETE FROM {0} ", tableName);
+            var cmdText = $"DELETE FROM {tableName} ";
 
             return cmdText;
         }
@@ -3065,11 +3023,11 @@ namespace DBLayer.Persistence
 
             if (isDel)
             {
-                cmdText = string.Format("DELETE FROM {0} WHERE {1}", tableName, sqlValues);
+                cmdText = $"DELETE FROM {tableName} WHERE {sqlValues}";
             }
             else
             {
-                cmdText = string.Format("SELECT * FROM {0} WHERE {1}", tableName, sqlValues);
+                cmdText = $"SELECT * FROM {tableName} WHERE {sqlValues}";
             }
 
             return paramerList;

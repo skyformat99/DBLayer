@@ -88,6 +88,8 @@ namespace DBLayer.Persistence
         /// <param name="paramers"></param>
         /// <returns></returns>
         StringBuilder GetPageCmdText(DataSource dataSource, string UnionText, string TableName, string PrimaryKey, string FldName, ref int? PageIndex, ref int? PageSize, string Filter, string Group, string Sort, ref DbParameter[] parameter, params DbParameter[] paramers);
+
+
     }
     public class SqlServerPagerGenerator : IPagerGenerator 
     {
@@ -478,10 +480,8 @@ namespace DBLayer.Persistence
             cmdText.AppendLine("BEGIN ");
             cmdText.AppendFormat("{0}; ", insertCmd);
             cmdText.AppendFormat("SELECT {0}.CURRVAL INTO :current_id FROM DUAL; ", dataTable.SequenceName);
-            //cmdText.AppendFormat("OPEN :p_cursor_1 FOR SELECT {0}.CURRVAL INTO :current_id FROM DUAL; \t\n", dataTable.SequenceName);
             cmdText.Append("END;");
-
-            //paramerList.Add(dataSource.CreateOutPutParameter("p_cursor_1", CursorName, CursorValue));
+            
             paramerList.Add(dataSource.CreateOutPutParamer(":current_id",DbType.Int64));
 
             var paras = paramerList.ToArray();
