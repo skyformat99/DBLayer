@@ -1,9 +1,10 @@
 DBLayer is a orm db access project.
+
 it's light weight easy to use.
 with spring.net is a good way to use i recommond use it.
 
 add a log data to db
-<code>
+
 var id = TheService.InsertEntity<SysLog, long>(
         () => new SysLog()
         {
@@ -13,14 +14,13 @@ var id = TheService.InsertEntity<SysLog, long>(
             LogCreateTime = DateTime.Now,
             LogType = "1"
         });
-</code>
 
 paged search engine
-<code>
+
         /// <summary>
-        /// 分页查询
+        /// paged search
         /// </summary>
-        /// <param name="condition">查询条件</param>
+        /// <param name="condition">the search condition</param>
         /// <returns></returns>
         public IEnumerable<SysUser> Seach(SysUserCondition.Search condition)
         {
@@ -54,6 +54,4 @@ paged search engine
             var result = base.GetResultByPager<SysUser, SysUserCondition.Search>(page);
             return result;
         }
-</code>
-
 
