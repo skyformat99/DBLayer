@@ -67,7 +67,9 @@
     <Compile Include="Data\PropertyFactory.cs" />
     <Compile Include="FuncExtensions.cs" />
     <Compile Include="IdentityGenerator.cs" />
+    <Compile Include="MySqlPagerGenerator.cs" />
     <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="OraclePagerGenerator.cs" />
     <Compile Include="Pager.cs" />
     <Compile Include="IPagerGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,6 +83,7 @@
     <Compile Include="Configuration\ProviderSettings.cs" />
     <Compile Include="Configuration\Provider\ProviderElement.cs" />
     <Compile Include="Configuration\Provider\ProviderElementCollection.cs" />
+    <Compile Include="SqlServerPagerGenerator.cs" />
     <Compile Include="Utilities\EncryptHelper.cs" />
   </ItemGroup>
   <ItemGroup>
