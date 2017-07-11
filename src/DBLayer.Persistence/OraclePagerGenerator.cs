@@ -137,7 +137,7 @@ namespace DBLayer.Persistence
             cmdText.AppendFormat("SELECT {0}.CURRVAL INTO :current_id FROM DUAL; ", dataTable.SequenceName);
             cmdText.Append("END;");
 
-            paramerList.Add(dataSource.CreateOutPutParamer(":current_id", DbType.Int64));
+            paramerList.Add(dataSource.CreateOutPutParameter(":current_id", DbType.Int64));
 
             var paras = paramerList.ToArray();
 
@@ -175,7 +175,7 @@ namespace DBLayer.Persistence
             cmdText.Append("END;");
 
             paramerList.Add(dataSource.CreateOutPutParameter("p_cursor_1", CursorName, CursorValue));
-            paramerList.Add(dataSource.CreateOutPutParamer(":current_id"));
+            paramerList.Add(dataSource.CreateOutPutParameter(":current_id"));
 
             var paras = paramerList.ToArray();
 

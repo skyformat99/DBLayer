@@ -479,7 +479,7 @@ namespace DBLayer.Persistence.Data
         /// </summary>
         /// <param name="pName">参数名称</param>
         /// <returns></returns>
-        public DbParameter CreateOutPutParamer(string pName)
+        public virtual DbParameter CreateOutPutParameter(string pName)
         {
             var paramer = DbProvider.GetDbProviderFactory().CreateParameter();
             paramer.ParameterName = pName;
@@ -494,7 +494,7 @@ namespace DBLayer.Persistence.Data
         /// <param name="propertyName">属性名</param>
         /// <param name="sourceType">映射属性值</param>
         /// <returns></returns>
-        public DbParameter CreateOutPutParameter(string pName,string propertyName,object propertyValue)
+        public virtual DbParameter CreateOutPutParameter(string pName,string propertyName,object propertyValue)
         {
             var paramer = DbProvider.GetDbProviderFactory().CreateParameter();
             paramer.ParameterName = pName;
@@ -511,7 +511,7 @@ namespace DBLayer.Persistence.Data
         /// <param name="pName">参数名称</param>
         /// <param name="pValue">参数值</param>
         /// <returns></returns>
-        public DbParameter CreateOutPutParamer(string pName, object pValue)
+        public virtual DbParameter CreateOutPutParameter(string pName, object pValue)
         {
             var paramer = DbProvider.GetDbProviderFactory().CreateParameter();
             paramer.ParameterName = pName;
@@ -527,7 +527,7 @@ namespace DBLayer.Persistence.Data
         /// <param name="pName">参数名称</param>
         /// <param name="pType">参数类型</param>
         /// <returns></returns>
-        public DbParameter CreateOutPutParamer(string pName, DbType pType)
+        public virtual DbParameter CreateOutPutParameter(string pName, DbType pType)
         {
             var paramer = DbProvider.GetDbProviderFactory().CreateParameter();
             paramer.ParameterName = pName;
@@ -544,7 +544,7 @@ namespace DBLayer.Persistence.Data
         /// <param name="pValue">参数值</param>
         /// <param name="pType">参数类型</param>
         /// <returns></returns>
-        public DbParameter CreateOutPutParamer(string pName, object pValue, DbType pType)
+        public virtual DbParameter CreateOutPutParameter(string pName, object pValue, DbType pType)
         {
             var paramer = DbProvider.GetDbProviderFactory().CreateParameter();
             paramer.ParameterName = pName;
@@ -562,7 +562,7 @@ namespace DBLayer.Persistence.Data
         /// <param name="pType">参数类型</param>
         /// <param name="pSize">长度</param>
         /// <returns></returns>
-        public DbParameter CreateOutPutParamer(string pName, DbType pType, int pSize)
+        public virtual DbParameter CreateOutPutParameter(string pName, DbType pType, int pSize)
         {
             var paramer = DbProvider.GetDbProviderFactory().CreateParameter();
             paramer.ParameterName = pName;
@@ -581,7 +581,7 @@ namespace DBLayer.Persistence.Data
         /// <param name="pType">参数类型</param>
         /// <param name="pSize">长度</param>
         /// <returns></returns>
-        public DbParameter CreateOutPutParamer(string pName, object pValue, DbType pType, int pSize)
+        public virtual DbParameter CreateOutPutParameter(string pName, object pValue, DbType pType, int pSize)
         {
             var paramer = DbProvider.GetDbProviderFactory().CreateParameter();
             paramer.ParameterName = pName;
@@ -600,7 +600,7 @@ namespace DBLayer.Persistence.Data
         /// </summary>
         /// <param name="pName">参数名称</param>
         /// <returns></returns>
-        public DbParameter CreateReturnValueParameter(string pName)
+        public virtual DbParameter CreateReturnValueParameter(string pName)
         {
             var paramer = DbProvider.GetDbProviderFactory().CreateParameter();
             paramer.ParameterName = pName;
@@ -615,7 +615,7 @@ namespace DBLayer.Persistence.Data
         /// <param name="pName">参数名称</param>
         /// <param name="pValue">参数值</param>
         /// <returns></returns>
-        public DbParameter CreateReturnValueParameter(string pName, object pValue)
+        public virtual DbParameter CreateReturnValueParameter(string pName, object pValue)
         {
             var paramer = DbProvider.GetDbProviderFactory().CreateParameter();
             paramer.ParameterName = pName;
@@ -631,7 +631,7 @@ namespace DBLayer.Persistence.Data
         /// <param name="pName">参数名称</param>
         /// <param name="pType">参数类型</param>
         /// <returns></returns>
-        public DbParameter CreateReturnValueParameter(string pName, DbType pType)
+        public virtual DbParameter CreateReturnValueParameter(string pName, DbType pType)
         {
             var paramer = DbProvider.GetDbProviderFactory().CreateParameter();
             paramer.ParameterName = pName;
@@ -648,7 +648,7 @@ namespace DBLayer.Persistence.Data
         /// <param name="pValue">参数值</param>
         /// <param name="pType">参数类型</param>
         /// <returns></returns>
-        public DbParameter CreateReturnValueParameter(string pName, object pValue, DbType pType)
+        public virtual DbParameter CreateReturnValueParameter(string pName, object pValue, DbType pType)
         {
             var paramer = DbProvider.GetDbProviderFactory().CreateParameter();
             paramer.ParameterName = pName;
@@ -666,7 +666,7 @@ namespace DBLayer.Persistence.Data
         /// <param name="pType">参数类型</param>
         /// <param name="pSize">长度</param>
         /// <returns></returns>
-        public DbParameter CreateReturnValueParameter(string pName, DbType pType, int pSize)
+        public virtual DbParameter CreateReturnValueParameter(string pName, DbType pType, int pSize)
         {
             var paramer = DbProvider.GetDbProviderFactory().CreateParameter();
             paramer.ParameterName = pName;
@@ -685,7 +685,7 @@ namespace DBLayer.Persistence.Data
         /// <param name="pType">参数类型</param>
         /// <param name="pSize">长度</param>
         /// <returns></returns>
-        public  DbParameter CreateReturnValueParameter(string pName, object pValue, DbType pType, int pSize)
+        public virtual DbParameter CreateReturnValueParameter(string pName, object pValue, DbType pType, int pSize)
         {
             var paramer = DbProvider.GetDbProviderFactory().CreateParameter();
             paramer.ParameterName = pName;

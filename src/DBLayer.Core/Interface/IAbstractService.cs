@@ -10,7 +10,7 @@ namespace DBLayer.Core.Interface
 {
     public interface IAbstractService
     {
-        #region 增
+        #region insert
         /// <summary>
         /// 插入一条数据
         /// </summary>
@@ -46,7 +46,7 @@ namespace DBLayer.Core.Interface
         Task<R> InsertEntityAsync<T, R>(Expression<Func<T>> expression, DbTransaction trans = null)
             where T : new();
         #endregion
-        #region 删
+        #region delete
         /// <summary>
         /// 删除数据
         /// </summary>
@@ -66,9 +66,9 @@ namespace DBLayer.Core.Interface
         Task<int> DeleteEntityAsync<T>(Expression<Func<T, bool>> where, DbTransaction trans = null) where T : new();
 
         #endregion
-        #region 改
+        #region update
         /// <summary>
-        /// 更新操作
+        /// update entity
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="expression"></param>
@@ -78,7 +78,7 @@ namespace DBLayer.Core.Interface
         int UpdateEntity<T>(Expression<Func<T>> expression, Expression<Func<T, bool>> where, DbTransaction trans = null) where T : new();
 
         /// <summary>
-        /// 更新操作
+        /// update entity async
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="expression"></param>
@@ -86,18 +86,18 @@ namespace DBLayer.Core.Interface
         /// <param name="trans"></param>
         /// <returns></returns>
         Task<int> UpdateEntityAsync<T>(Expression<Func<T>> expression, Expression<Func<T, bool>> where, DbTransaction trans = null) where T : new();
-        
+
         #endregion
-        #region 查
+        #region select
         /// <summary>
-        /// 获取 T 单个实体
+        /// get only one entity
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="func"></param>
         /// <returns></returns>
         T GetEntity<T>(Expression<Func<T, bool>> where, Expression<Func<OrderExpression<T>, object>> order = null, DbTransaction trans = null) where T : new();
         /// <summary>
-        /// 获取 T 单个实体异步
+        /// get only one entity async
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="where"></param>
@@ -107,7 +107,7 @@ namespace DBLayer.Core.Interface
         Task<T> GetEntityAsync<T>(Expression<Func<T, bool>> where, Expression<Func<OrderExpression<T>, object>> order = null, DbTransaction trans = null) where T : new();
 
         /// <summary>
-        /// 获取实体集合
+        /// find a list of entity
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="where"></param>
@@ -116,7 +116,7 @@ namespace DBLayer.Core.Interface
         IList<T> GetEntityList<T>(Expression<Func<T, bool>> where = null, Expression<Func<OrderExpression<T>, object>> order = null, DbTransaction trans = null, int? top = null) where T : new();
 
         /// <summary>
-        /// 获取实体集合
+        /// find a list of entity
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="where"></param>
@@ -127,7 +127,7 @@ namespace DBLayer.Core.Interface
         #endregion
 
         /// <summary>
-        /// 获得事务
+        /// get transaction
         /// </summary>
         /// <returns></returns>
         DbTransaction GetTransaction();
