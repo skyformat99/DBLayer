@@ -9,8 +9,8 @@ var id = TheService.InsertEntity<SysLog, long>(
         () => new SysLog()
         {
             LogId = -1,
-            LogContentJson = "²âÊÔ",
-            LogCreater = "²âÊÔ",
+            LogContentJson = "Â²Ã¢ÃŠÃ”",
+            LogCreater = "Â²Ã¢ÃŠÃ”",
             LogCreateTime = DateTime.Now,
             LogType = "1"
         });
@@ -54,4 +54,9 @@ paged search engine
             var result = base.GetResultByPager<SysUser, SysUserCondition.Search>(page);
             return result;
         }
+
+plan 
+Read-write separation
+simply separate read and write database with power string r1w1
+when you op cud a timer will run , in timer range,the connection will go to r1 database
 
