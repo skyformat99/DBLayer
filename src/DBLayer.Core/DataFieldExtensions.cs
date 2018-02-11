@@ -27,6 +27,7 @@ namespace DBLayer.Core
         public static bool IsReadablePropertyType(this Type t)
         {
             var isReadable = t.IsPrimitive ||
+                              t == typeof(Decimal) ||
                               t == typeof(DateTime) ||
                               t == typeof(string) ||
                               t == typeof(Uri);

@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractService.cs" />
+    <Compile Include="AbstractServiceGeneric.cs" />
     <Compile Include="Configuration\AtomSourceSection.cs" />
     <Compile Include="Configuration\AtomSourceSettings.cs" />
     <Compile Include="Configuration\AtomSource\AtomSourceElement.cs" />

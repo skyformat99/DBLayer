@@ -46,6 +46,7 @@
     <Compile Include="DataFieldAttribute.cs" />
     <Compile Include="DataFieldExtensions.cs" />
     <Compile Include="FuncExtensions.cs" />
+    <Compile Include="Interface\IAbstractServiceGeneric.cs" />
     <Compile Include="Interface\IAbstractService.cs" />
     <Compile Include="Interface\IDataSource.cs" />
     <Compile Include="Interface\IDbProvider.cs" />
