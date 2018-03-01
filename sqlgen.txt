@@ -1,0 +1,114 @@
+﻿        class AgentDraftSql
+        {
+            const string _defaultSqlPath = @"c:\\wwcws_sqls2.log";
+            static object _obj4lock = new object();
+            
+            static readonly Dictionary<Type, SqlDbType> _dic = new Dictionary<Type, SqlDbType>
+            {
+                { typeof(sbyte), SqlDbType.SmallInt },
+                { typeof(byte), SqlDbType.TinyInt },
+                { typeof(short), SqlDbType.SmallInt },
+                { typeof(ushort), SqlDbType.SmallInt },
+                { typeof(int), SqlDbType.Int },
+                { typeof(uint), SqlDbType.Int },
+                { typeof(long), SqlDbType.BigInt },
+                { typeof(ulong), SqlDbType.BigInt },
+                { typeof(float), SqlDbType.Float },
+                { typeof(double), SqlDbType.Decimal },
+                { typeof(string), SqlDbType.VarChar },
+                { typeof(bool), SqlDbType.Bit },
+                { typeof(DateTime), SqlDbType.DateTime },
+                { typeof(decimal), SqlDbType.Decimal },
+                { typeof(Enum), SqlDbType.Int },
+
+                { typeof(sbyte?), SqlDbType.SmallInt },
+                { typeof(byte?), SqlDbType.TinyInt },
+                { typeof(short?), SqlDbType.SmallInt },
+                { typeof(ushort?), SqlDbType.SmallInt },
+                { typeof(int?), SqlDbType.Int },
+                { typeof(uint?), SqlDbType.Int },
+                { typeof(long?), SqlDbType.BigInt },
+                { typeof(ulong?), SqlDbType.BigInt },
+                { typeof(float?), SqlDbType.Float },
+                { typeof(double?), SqlDbType.Decimal },
+                { typeof(bool?), SqlDbType.Bit },
+                { typeof(DateTime?), SqlDbType.DateTime },
+                { typeof(decimal?), SqlDbType.Decimal },
+            };
+
+            static string GenDraftSql(string sql, DynamicParameters parameters)
+            {
+                try
+                {
+                    IEnumerable<string> names = parameters.ParameterNames.OrderByDescending(pn => pn.Length);
+
+                    string sStatement = sql;
+
+                    foreach (string name in names)
+                    {
+                        var value = parameters.Get<object>(name);
+                        var nameInSQL = string.Format("@{0}", name);
+
+                        if (value == null)
+                            sStatement = sStatement.Replace(nameInSQL, "NULL");
+                        else
+                        {
+                            Type type = value.GetType();
+                            if (type.IsEnum)
+                                type = typeof(Enum);
+
+                            if (_dic.ContainsKey(type))
+                            {
+                                switch (_dic[type])
+                                {
+                                    case SqlDbType.Bit:
+                                        sStatement = sStatement.Replace(nameInSQL, Convert.ToInt16(value).ToString());
+                                        break;
+                                    case SqlDbType.BigInt:
+                                    case SqlDbType.Int:
+                                    case SqlDbType.Decimal:
+                                    case SqlDbType.Float:
+                                    case SqlDbType.SmallInt:
+                                    case SqlDbType.TinyInt:
+                                        sStatement = sStatement.Replace(nameInSQL, value.GetType().IsEnum
+                                            ? ((Enum)value).ToString("d") 
+                                            : value.ToString());
+                                        break;
+                                    case SqlDbType.DateTime:
+                                    case SqlDbType.VarChar:
+                                        string sTempValue = value.ToString().Replace("'", "''");
+                                        sStatement = sStatement.Replace(nameInSQL, string.Format("'{0}'", sTempValue));
+                                        break;
+                                    default:
+                                        throw new Exception("【异常定义 2018-01-03 151219】未添加类型映射");
+                                }
+                            }
+                            else
+                            {
+                                throw new Exception(string.Format("【异常定义 2018-01-03 161857】不包含当前类型: 【{0}】", type.FullName));
+                            }
+                        }
+                    }
+
+                    return sStatement;
+                }
+                catch (Exception ex)
+                {
+                    return string.Format("输出原始SQL出现异常，@闻祖东。异常信息为：【{0}】", ex.ToString());
+                }
+            }
+
+            public static void LogSQL(string sql, DynamicParameters parameters)
+            {
+                string log = GenDraftSql(sql, parameters);
+                lock (_obj4lock)
+                {
+                    if (!File.Exists(_defaultSqlPath))
+                        File.Create(_defaultSqlPath).Dispose();
+
+                    using (FileStream fs = new FileStream(_defaultSqlPath, FileMode.Append))
+                    using (StreamWriter sw = new StreamWriter(fs))
+                        sw.WriteLine($"{DateTime.Now} {log}");
+                }
+            }
+        }
