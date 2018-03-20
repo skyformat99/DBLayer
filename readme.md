@@ -13,9 +13,8 @@
 * it's light weight easy to use.
 * with spring.net is a good way to use i recommond use it.
 
-```
+```C#
 //add a log data to db
-
 var id = TheService.InsertEntity<SysLog, long>(
         () => new SysLog()
         {
@@ -25,9 +24,8 @@ var id = TheService.InsertEntity<SysLog, long>(
             LogCreateTime = DateTime.Now,
             LogType = "1"
         });
-```
-```
-///paged search engine
+
+        //paged search engine
 
         /// <summary>
         /// paged search
