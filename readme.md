@@ -12,6 +12,9 @@
 
 * it's light weight easy to use.
 * with spring.net is a good way to use i recommond use it.
+* Automatic generation of distributed ID
+* pager code easy to use
+* support sqlserver、oracle、mysql
 
 ```C#
 //add a log data to db
@@ -25,45 +28,45 @@ var id = TheService.InsertEntity<SysLog, long>(
             LogType = "1"
         });
 
-        //paged search engine
+//paged search engine
 
-        /// <summary>
-        /// paged search
-        /// </summary>
-        /// <param name="condition">the search condition</param>
-        /// <returns></returns>
-        public IEnumerable<SysUser> Seach(SysUserCondition.Search condition)
+/// <summary>
+/// paged search
+/// </summary>
+/// <param name="condition">the search condition</param>
+/// <returns></returns>
+public IEnumerable<SysUser> Seach(SysUserCondition.Search condition)
+{
+    var page = new Pager<SysUserCondition.Search>()
+    {
+        Condition = condition,
+        Table = "sys_user",
+        Key = "user_id",
+        Order = string.Empty,
+        Field = "*",
+        WhereAction = (Condition, Where, Paramters) =>
         {
-            var page = new Pager<SysUserCondition.Search>()
+            if (!string.IsNullOrEmpty(Condition.UserName))
             {
-                Condition = condition,
-                Table = "sys_user",
-                Key = "user_id",
-                Order = string.Empty,
-                Field = "*",
-                WhereAction = (Condition, Where, Paramters) =>
-                {
-                    if (!string.IsNullOrEmpty(Condition.UserName))
-                    {
-                        Where.Append("AND user_name LIKE @user_name ");
-                        Paramters.Add(base.CreateParameter("@user_name", string.Concat("%", Condition.UserName, "%")));
-                    }
-                    if (!string.IsNullOrEmpty(Condition.UserEmail))
-                    {
-                        Where.Append("AND user_email LIKE @user_email ");
-                        Paramters.Add(base.CreateParameter("@user_email", string.Concat("%", Condition.UserEmail, "%")));
-                    }
-                    if (!string.IsNullOrEmpty(Condition.UserMobile))
-                    {
-                        Where.Append("AND user_mobile LIKE @user_mobile ");
-                        Paramters.Add(base.CreateParameter("@user_mobile", string.Concat("%", Condition.UserMobile, "%")));
-                    }
-                }
-            };
-
-            var result = base.GetResultByPager<SysUser, SysUserCondition.Search>(page);
-            return result;
+                Where.Append("AND user_name LIKE @user_name ");
+                Paramters.Add(base.CreateParameter("@user_name", string.Concat("%", Condition.UserName, "%")));
+            }
+            if (!string.IsNullOrEmpty(Condition.UserEmail))
+            {
+                Where.Append("AND user_email LIKE @user_email ");
+                Paramters.Add(base.CreateParameter("@user_email", string.Concat("%", Condition.UserEmail, "%")));
+            }
+            if (!string.IsNullOrEmpty(Condition.UserMobile))
+            {
+                Where.Append("AND user_mobile LIKE @user_mobile ");
+                Paramters.Add(base.CreateParameter("@user_mobile", string.Concat("%", Condition.UserMobile, "%")));
+            }
         }
+    };
+
+    var result = base.GetResultByPager<SysUser, SysUserCondition.Search>(page);
+    return result;
+}
 ```
 
 ## plan 
