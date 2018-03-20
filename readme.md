@@ -1,21 +1,33 @@
-DBLayer is a orm db access project.
+<p align="center">
+    <br>
+    <a href="http://www.wxius.com">
+        <img width="200" src="http://style.wxius.com/assets/frontend/layout/img/logos/logo-corp-red.png">
+    </a>
+    <br>
+</p>
+<br/>
 
-it's light weight easy to use.
-with spring.net is a good way to use i recommond use it.
 
-add a log data to db
+#### DBLayer is a orm db access project.
+
+* it's light weight easy to use.
+* with spring.net is a good way to use i recommond use it.
+
+```
+//add a log data to db
 
 var id = TheService.InsertEntity<SysLog, long>(
         () => new SysLog()
         {
             LogId = -1,
-            LogContentJson = "²âÊÔ",
-            LogCreater = "²âÊÔ",
+            LogContentJson = "test",
+            LogCreater = "test",
             LogCreateTime = DateTime.Now,
             LogType = "1"
         });
-
-paged search engine
+```
+```
+///paged search engine
 
         /// <summary>
         /// paged search
@@ -54,9 +66,10 @@ paged search engine
             var result = base.GetResultByPager<SysUser, SysUserCondition.Search>(page);
             return result;
         }
+```
 
-plan 
-Read-write separation
-simply separate read and write database with power string r1w1
-when you op cud a timer will run , in timer range,the connection will go to r1 database
+## plan 
+* Read-write separation
+* simply separate read and write database with power string r1w1
+* when you op cud a timer will run , in timer range,the connection will go to r1 database
 
