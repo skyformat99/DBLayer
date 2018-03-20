@@ -212,7 +212,7 @@ namespace DBLayer.Persistence
 
             cmdText.AppendLine(UnionText);
             //
-            cmdText.AppendFormat("SELECT TOP({5}Pagesize) * FROM ( SELECT TOP({5}strEndRow) ROW_NUMBER() OVER({0}) AS ROWNUM, {1} FROM {2} {3} {4}) AS QUERY_T1 WHERE ROWNUM >= {5}strStartRow ORDER BY ROWNUM;",
+            cmdText.AppendFormat("SELECT * FROM ( SELECT ROW_NUMBER() OVER({0}) AS ROWNUM, {1} FROM {2} {3} {4}) AS QUERY_T1 WHERE ROWNUM >= {5}strStartRow AND ROWNUM <= {5}strEndRow ORDER BY ROWNUM;",
                  strSort, FldName, TableName, strFilter, strGroup, dataSource.DbProvider.ParameterPrefix);
 
             //cmdText.AppendFormat("SELECT * FROM (SELECT {0},ROW_NUMBER() OVER({1}) AS row FROM {2}{3}{4}) a WHERE row BETWEEN {5}strStartRow AND {5}strEndRow;", 

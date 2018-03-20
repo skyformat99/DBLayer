@@ -591,7 +591,7 @@ namespace DBLayer.Persistence
         /// <returns>所新增记录的 ID,如果返回 -1 则表示增加失败</returns>
         public object InsertEntity(T entity, DbTransaction trans = null, params string[] exclusionList) 
         {
-            var result = InsertEntity<T>(entity, trans, exclusionList);
+            var result = InsertEntity<T,object>(entity, trans, exclusionList);
             return result;
         }
         public R InsertEntity<R>(T entity, DbTransaction trans = null, params string[] exclusionList)
@@ -610,7 +610,7 @@ namespace DBLayer.Persistence
          public async Task <object> InsertEntityAsync(Expression<Func<T>> expression, DbTransaction trans = null) 
             
         {
-            var result = await InsertEntityAsync<T>(expression, trans);
+            var result = await InsertEntityAsync<T,object>(expression, trans);
             return result;
         }
         /// <summary>
@@ -636,7 +636,7 @@ namespace DBLayer.Persistence
         /// <returns>所新增记录的 ID,如果返回 -1 则表示增加失败</returns>
         public async Task<object> InsertEntityAsync(T entity, DbTransaction trans = null, params string[] exclusionList)
         {
-            var result = await InsertEntityAsync<T>(entity, trans, exclusionList);
+            var result = await InsertEntityAsync<T,object>(entity, trans, exclusionList);
             return result;
         }
         /// <summary>
