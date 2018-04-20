@@ -774,27 +774,6 @@ namespace DBLayer.Persistence
 
             return single;
         }
-        ///// <summary>
-        ///// 返回首行首列
-        ///// </summary>
-        ///// <param name="cmdText">SQL 语句</param>
-        ///// <param name="paramers">参数数组</param>
-        ///// <returns>返回首行首列</returns>
-        //public async Task<T> GetSingleAsync<T>(Task<object> obj)
-        //{
-        //    var single = new Task<T>(() => default(T));
-
-        //    try
-        //    {
-        //        single = (Task<T>)obj.ChangeType(typeof(Task<T>));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.Error(ex.Message, ex);
-        //    }
-
-        //    return await single;
-        //}
         #endregion
 
         #region GetList
@@ -1360,22 +1339,24 @@ namespace DBLayer.Persistence
             var para = paramerList.ToArray();
             if (newID == null)
             {
-                //var cmdText = ThePagerGenerator.GetInsertCmdText<T>(this, ref paramerList, insertCmd);
-                newID = ThePagerGenerator.InsertExecutor<T>(this, insertCmd, paramerList, trans);
-                //newID =
-                //        (trans == null
-                //        ? base.ExecuteScalar(cmdText.ToString(), CommandType.Text, para)
-                //        : base.ExecuteScalar(trans, cmdText.ToString(), CommandType.Text, para));
+                return ThePagerGenerator.InsertExecutor<T>(this, insertCmd, paramerList, trans);
             }
-            else {
-                if (trans == null)
-                {
-                    base.ExecuteNonQuery(insertCmd.ToString(), CommandType.Text, para);
-                }
-                else {
-                    base.ExecuteNonQuery(trans, insertCmd.ToString(), CommandType.Text, para);
-                }
+
+            var retval = -1;
+            if (trans == null)
+            {
+                retval = base.ExecuteNonQuery(insertCmd.ToString(), CommandType.Text, para);
             }
+            else
+            {
+                retval = base.ExecuteNonQuery(trans, insertCmd.ToString(), CommandType.Text, para);
+            }
+
+            if (retval <= 0)
+            {
+                return -1;
+            }
+
             return newID;
         }
         public R InsertEntity<T, R>(T entity, DbTransaction trans = null, params string[] exclusionList)
@@ -1400,38 +1381,31 @@ namespace DBLayer.Persistence
             var paramerList = new List<DbParameter>();
             var insertStr = this.Insert<T>(expression, ref newID, ref paramerList, TheGenerator);
             var allInsert = CreateInsertAllSql<T>();
-            var result = new Task<object>(() => newID);
 
             var insertCmd = new StringBuilder();
             insertCmd.AppendFormat("{0}{1}", allInsert, insertStr);
 
             if (newID == null)
             {
-                result=ThePagerGenerator.InsertExecutorAsync<T>(this, insertCmd, paramerList, trans);
-                //var cmdText = ThePagerGenerator.GetInsertCmdText<T>(this, ref paramerList, insertCmd);
-                //result = trans == null ?
-                //    base.ExecuteScalarAsync(cmdText.ToString(), CommandType.Text, paramerList.ToArray()) :
-                //    base.ExecuteScalarAsync(trans, cmdText.ToString(), CommandType.Text, paramerList.ToArray());
+                return await ThePagerGenerator.InsertExecutorAsync<T>(this, insertCmd, paramerList, trans);
+            }
+            
+            var cmdText = insertCmd.ToString();
+            var retval = -1;
+            if (trans == null)
+            {
+                retval = await base.ExecuteNonQueryAsync(cmdText, CommandType.Text, paramerList.ToArray());
             }
             else
             {
-                var retval = new Task<int>(() => -1);
-                var cmdText = insertCmd.ToString();
-                if (trans == null)
-                {
-                    retval = base.ExecuteNonQueryAsync(cmdText, CommandType.Text, paramerList.ToArray());
-                }
-                else
-                {
-                    retval = base.ExecuteNonQueryAsync(trans, cmdText, CommandType.Text, paramerList.ToArray());
-                }
-                Task.WaitAll(retval);
-                if (retval.Result<=0)
-                {
-                    result = new Task<object>(()=>null);
-                }
+                retval = await base.ExecuteNonQueryAsync(trans, cmdText, CommandType.Text, paramerList.ToArray());
             }
-            return result;
+
+            if (retval <= 0)
+            {
+                return -1;
+            }
+            return newID;
         }
         /// <summary>
         /// 插入一条数据
@@ -1466,30 +1440,28 @@ namespace DBLayer.Persistence
 
             var paramerList = CreateInsertSql(ref insertCmd, entity, ref newID, exclusionList);
             var para = paramerList.ToArray();
-            var result =new Task<object>(()=>newID);
+
             if (newID == null)
             {
-                result = ThePagerGenerator.InsertExecutorAsync<T>(this, insertCmd, paramerList, trans);
+                return await ThePagerGenerator.InsertExecutorAsync<T>(this, insertCmd, paramerList, trans);
+            }
 
-                //var cmdText = ThePagerGenerator.GetInsertCmdText<T>(this, ref paramerList, insertCmd);
-
-                //result =
-                //        (trans == null
-                //        ? base.ExecuteScalarAsync(cmdText.ToString(), CommandType.Text, para)
-                //        : base.ExecuteScalarAsync(trans, cmdText.ToString(), CommandType.Text, para));
+            var retval = -1;
+            if (trans == null)
+            {
+                retval = await base.ExecuteNonQueryAsync(insertCmd.ToString(), CommandType.Text, para);
             }
             else
             {
-                if (trans == null)
-                {
-                    await base.ExecuteNonQueryAsync(insertCmd.ToString(), CommandType.Text, para);
-                }
-                else
-                {
-                    await base.ExecuteNonQueryAsync(trans, insertCmd.ToString(), CommandType.Text, para);
-                }
+                retval = await base.ExecuteNonQueryAsync(trans, insertCmd.ToString(), CommandType.Text, para);
             }
-            return result;
+
+            if (retval <= 0)
+            {
+                return -1;
+            }
+
+            return newID;
         }
         /// <summary>
         /// 通过实体类型 T 向表中增加一条记录
@@ -1936,7 +1908,7 @@ namespace DBLayer.Persistence
         /// <returns>返回首行首列</returns>
         public async Task<object> ExecuteScalarAsync(string cmdText, params DbParameter[] paramers)
         {
-            var result = this.ExecuteScalarAsync(cmdText, null, CommandType.Text, paramers);
+            var result = await this.ExecuteScalarAsync(cmdText, null, CommandType.Text, paramers);
             return result;
         }
         /// <summary>
@@ -1947,7 +1919,7 @@ namespace DBLayer.Persistence
         /// <returns>返回首行首列</returns>
         public async Task<object> ExecuteScalarAsync(string cmdText, DbTransaction trans = null, params DbParameter[] paramers)
         {
-            var result = this.ExecuteScalarAsync(cmdText, trans, CommandType.Text, paramers);
+            var result = await this.ExecuteScalarAsync(cmdText, trans, CommandType.Text, paramers);
 
             return result;
         }
@@ -1960,7 +1932,7 @@ namespace DBLayer.Persistence
         public async Task<object> ExecuteScalarAsync(string cmdText, object obj, DbTransaction trans = null)
         {
             var parameters = this.ToDbParameters(obj);
-            var result = this.ExecuteScalarAsync(cmdText, trans, CommandType.Text, parameters);
+            var result = await this.ExecuteScalarAsync(cmdText, trans, CommandType.Text, parameters);
             return result;
         }
         /// <summary>
@@ -1973,8 +1945,8 @@ namespace DBLayer.Persistence
         {
             var result =
                 trans == null ?
-                base.ExecuteScalarAsync(cmdText, commandType, paramers) :
-                base.ExecuteScalarAsync(trans, cmdText, commandType, paramers);
+                await base.ExecuteScalarAsync(cmdText, commandType, paramers) :
+                await base.ExecuteScalarAsync(trans, cmdText, commandType, paramers);
 
             return result;
         }
@@ -2430,217 +2402,7 @@ namespace DBLayer.Persistence
 
         #endregion
 
-        #region 创建参数方法
-        /// <summary>
-        /// 创建参数
-        /// </summary>
-        /// <param name="pName">参数名</param>
-        /// <param name="pValue">参数值</param>
-        /// <returns>参数</returns>
-        public DbParameter CreateParameter(string pName, object pValue)
-        {
-            var returnValue = base.CreateParameter(pName, pValue);
-
-            return returnValue;
-        }
-
-        /// <summary>
-        /// 创建参数
-        /// </summary>
-        /// <param name="pName">参数名</param>
-        /// <param name="pValue">参数值</param>
-        /// <param name="pType">参数类型</param>
-        /// <returns>参数</returns>
-        public DbParameter CreateParameter(string pName, object pValue, DbType pType)
-        {
-            var returnValue = base.CreateParameter(pName, pValue, pType);
-
-            return returnValue;
-        }
-
-        /// <summary>
-        /// 创建参数
-        /// </summary>
-        /// <param name="pName">参数名</param>
-        /// <param name="pValue">参数值</param>
-        /// <param name="pType">参数类型</param>
-        /// <param name="pSize">长度</param>
-        /// <returns>参数</returns>
-        public DbParameter CreateParameter(string pName, object pValue, DbType pType, int pSize)
-        {
-            var returnValue = base.CreateParameter(pName, pValue, pType, pSize);
-
-            return returnValue;
-        }
-
-        #region OutPut
-        /// <summary>
-        /// 创建一个带有返回值的存储过程参数
-        /// </summary>
-        /// <param name="pName">参数名称</param>
-        /// <returns></returns>
-        public DbParameter CreateOutPutParameter(string pName)
-        {
-            var paramer = base.CreateOutPutParameter(pName);
-
-            return paramer;
-        }
-
-        /// <summary>
-        /// 创建一个带有返回值的存储过程参数
-        /// </summary>
-        /// <param name="pName">参数名称</param>
-        /// <param name="pValue">参数值</param>
-        /// <returns></returns>
-        public DbParameter CreateOutPutParameter(string pName, object pValue)
-        {
-            var paramer = base.CreateOutPutParameter(pName, pValue);
-
-            return paramer;
-        }
-
-        /// <summary>
-        /// 创建一个带有返回值的存储过程参数
-        /// </summary>
-        /// <param name="pName">参数名称</param>
-        /// <param name="pType">参数类型</param>
-        /// <returns></returns>
-        public DbParameter CreateOutPutParameter(string pName, DbType pType)
-        {
-            var paramer = base.CreateOutPutParameter(pName, pType);
-
-            return paramer;
-        }
-
-        /// <summary>
-        /// 创建一个带有返回值的存储过程参数
-        /// </summary>
-        /// <param name="pName">参数名称</param>
-        /// <param name="pValue">参数值</param>
-        /// <param name="pType">参数类型</param>
-        /// <returns></returns>
-        public DbParameter CreateOutPutParameter(string pName, object pValue, DbType pType)
-        {
-            var paramer = base.CreateOutPutParameter(pName, pValue, pType);
-
-            return paramer;
-        }
-
-        /// <summary>
-        /// 创建一个带有返回值的存储过程参数
-        /// </summary>
-        /// <param name="pName">参数名称</param>
-        /// <param name="pType">参数类型</param>
-        /// <param name="pSize">长度</param>
-        /// <returns></returns>
-        public DbParameter CreateOutPutParameter(string pName, DbType pType, int pSize)
-        {
-            var paramer = base.CreateOutPutParameter(pName, pType, pSize);
-
-            return paramer;
-        }
-
-        /// <summary>
-        /// 创建一个带有返回值的存储过程参数
-        /// </summary>
-        /// <param name="pName">参数名称</param>
-        /// <param name="pValue">参数值</param>
-        /// <param name="pType">参数类型</param>
-        /// <param name="pSize">长度</param>
-        /// <returns></returns>
-        public DbParameter CreateOutPutParameter(string pName, object pValue, DbType pType, int pSize)
-        {
-            var paramer = base.CreateOutPutParameter(pName, pValue, pType, pSize);
-
-            return paramer;
-        }
-        #endregion
-
-
-        #region returnvalue
-        /// <summary>
-        /// 创建一个带有返回值的存储过程参数
-        /// </summary>
-        /// <param name="pName">参数名称</param>
-        /// <returns></returns>
-        public DbParameter CreateReturnValueParameter(string pName)
-        {
-            var paramer = base.CreateReturnValueParameter(pName);
-
-            return paramer;
-        }
-
-        /// <summary>
-        /// 创建一个带有返回值的存储过程参数
-        /// </summary>
-        /// <param name="pName">参数名称</param>
-        /// <param name="pValue">参数值</param>
-        /// <returns></returns>
-        public DbParameter CreateReturnValueParameter(string pName, object pValue)
-        {
-            var paramer = base.CreateReturnValueParameter(pName, pValue);
-
-            return paramer;
-        }
-
-        /// <summary>
-        /// 创建一个带有返回值的存储过程参数
-        /// </summary>
-        /// <param name="pName">参数名称</param>
-        /// <param name="pType">参数类型</param>
-        /// <returns></returns>
-        public DbParameter CreateReturnValueParameter(string pName, DbType pType)
-        {
-            var paramer = base.CreateReturnValueParameter(pName, pType);
-
-            return paramer;
-        }
-
-        /// <summary>
-        /// 创建一个带有返回值的存储过程参数
-        /// </summary>
-        /// <param name="pName">参数名称</param>
-        /// <param name="pValue">参数值</param>
-        /// <param name="pType">参数类型</param>
-        /// <returns></returns>
-        public DbParameter CreateReturnValueParameter(string pName, object pValue, DbType pType)
-        {
-            var paramer = base.CreateReturnValueParameter(pName, pValue, pType);
-
-            return paramer;
-        }
-
-        /// <summary>
-        /// 创建一个带有返回值的存储过程参数
-        /// </summary>
-        /// <param name="pName">参数名称</param>
-        /// <param name="pType">参数类型</param>
-        /// <param name="pSize">长度</param>
-        /// <returns></returns>
-        public DbParameter CreateReturnValueParameter(string pName, DbType pType, int pSize)
-        {
-            var paramer = base.CreateReturnValueParameter(pName, pType, pSize);
-
-            return paramer;
-        }
-
-        /// <summary>
-        /// 创建一个带有返回值的存储过程参数
-        /// </summary>
-        /// <param name="pName">参数名称</param>
-        /// <param name="pValue">参数值</param>
-        /// <param name="pType">参数类型</param>
-        /// <param name="pSize">长度</param>
-        /// <returns></returns>
-        public DbParameter CreateReturnValueParameter(string pName, object pValue, DbType pType, int pSize)
-        {
-            var paramer = base.CreateReturnValueParameter(pName, pValue, pType, pSize);
-
-            return paramer;
-        }
-        #endregion
-
-        #endregion
+        
 
         //#region Transaction
         ///// <summary>
@@ -2772,7 +2534,7 @@ namespace DBLayer.Persistence
             var dataTable = entityType.GetDataTableAttribute(out tableName);
 
 
-            var cmdText = string.Format("INSERT INTO {0} ", tableName);
+            var cmdText = $"INSERT INTO {tableName} ";
 
             return cmdText;
         }
@@ -2824,7 +2586,7 @@ namespace DBLayer.Persistence
                 sqlValues.Length = sqlValues.Length - 1;
             }
 
-            cmdText = string.Format("DELETE FROM {0} WHERE {1}", tableName, sqlValues);
+            cmdText = $"DELETE FROM {tableName} WHERE {sqlValues}";
 
             return paramerList;
         }
@@ -2904,7 +2666,7 @@ namespace DBLayer.Persistence
                 sqlValues.Length = sqlValues.Length - 1;
             }
 
-            cmdText = string.Format("UPDATE {0} SET {1} WHERE {2} ", tableName, sqlFields, sqlValues);
+            cmdText = $"UPDATE {tableName} SET {sqlFields} WHERE {sqlValues} ";
 
             return paramerList;
         }
@@ -2923,7 +2685,7 @@ namespace DBLayer.Persistence
             var dataTable = entityType.GetDataTableAttribute(out tableName);
 
 
-            var cmdText = string.Format("UPDATE {0} SET ", tableName);
+            var cmdText = $"UPDATE {tableName} SET ";
 
             return cmdText;
         }
@@ -2939,7 +2701,7 @@ namespace DBLayer.Persistence
             var tableName = string.Empty; ;
             var dataTable = entityType.GetDataTableAttribute(out tableName);
 
-            var cmdText = string.Format("SELECT {1} * FROM {0} ", tableName, top);
+            var cmdText = $"SELECT {top} * FROM {tableName} ";
             return cmdText;
         }
 
@@ -2956,7 +2718,7 @@ namespace DBLayer.Persistence
             var dataTable = entityType.GetDataTableAttribute(out tableName);
 
             var fields = CreateAllEntityDicSql<T>(exclusionList);
-            var cmdText = string.Format("SELECT {2} {1} FROM {0} ", tableName, fields, top);
+            var cmdText = $"SELECT {top} {fields} FROM {tableName} ";
 
             return cmdText;
         }
@@ -3006,7 +2768,7 @@ namespace DBLayer.Persistence
             var dataTable = entityType.GetDataTableAttribute(out tableName);
 
 
-            var cmdText = string.Format("DELETE FROM {0} ", tableName);
+            var cmdText = $"DELETE FROM {tableName} ";
 
             return cmdText;
         }
@@ -3054,11 +2816,11 @@ namespace DBLayer.Persistence
 
             if (isDel)
             {
-                cmdText = string.Format("DELETE FROM {0} WHERE {1}", tableName, sqlValues);
+                cmdText = $"DELETE FROM {tableName} WHERE {sqlValues}";
             }
             else
             {
-                cmdText = string.Format("SELECT * FROM {0} WHERE {1}", tableName, sqlValues);
+                cmdText = $"SELECT * FROM {tableName} WHERE {sqlValues}";
             }
 
             return paramerList;

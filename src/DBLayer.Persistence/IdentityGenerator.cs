@@ -26,7 +26,7 @@ namespace DBLayer.Persistence
         private readonly static int workerIdBits = 10;
         //序列号标识位数
         private readonly static int sequenceBits = 10;
-
+        
         //区域标志ID最大值
         private readonly static int maxRegionId = -1 ^ (-1 << regionIdBits);
         // 机器ID最大值
@@ -149,8 +149,9 @@ namespace DBLayer.Persistence
             }
 
             lastTimestamp = timestamp;
-
+            #pragma warning disable CS0675
             return ((timestamp - twepoch) << timestampLeftShift) | (paddingnum << regionIdShift) | (workerId << workerIdShift) | sequence;
+            
         }
 
         /// <summary>

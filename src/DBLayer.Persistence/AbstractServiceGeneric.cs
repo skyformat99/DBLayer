@@ -382,18 +382,6 @@ namespace DBLayer.Persistence
 
             return result;
         }
-        /// <summary>
-        /// 返回首行首列
-        /// </summary>
-        /// <param name="cmdText">SQL 语句</param>
-        /// <param name="paramers">参数数组</param>
-        /// <returns>返回首行首列</returns>
-        public async Task<T> GetSingleAsync<T>(Task<object> obj)
-        {
-            var result = await GetSingleAsync<T>(obj);
-
-            return result;
-        }
         #endregion
 
         #region GetList
@@ -827,20 +815,7 @@ namespace DBLayer.Persistence
             return result;
         }
 
-        /// <summary>
-        /// 返回分页实体字典列表集合异步
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="T1"></typeparam>
-        /// <param name="page"></param>
-        /// <returns></returns>
-        public async Task<IEnumerable<IDictionary<string, object>>> GetResultByPagerDicAsync<T1>(Pager<T1> page)
-            
-            where T1 : BasePageCondition, new()
-        {
-            var result = await GetResultByPagerDicAsync<T, T1>(page);
-            return result;
-        }
+        
         #endregion
         #endregion
 

@@ -74,3 +74,8 @@ public IEnumerable<SysUser> Seach(SysUserCondition.Search condition)
 * simply separate read and write database with power string r1w1
 * when you op cud a timer will run , in timer range,the connection will go to r1 database
 
+## cake cmd
+```
+Set-ExecutionPolicy Unrestricted
+./build.ps1
+```

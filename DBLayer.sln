@@ -1,0 +1,68 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EA4DADCC-270E-4D26-A324-0AF86E429123}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		build.cake = build.cake
+		build.ps1 = build.ps1
+		build.sh = build.sh
+		readme.md = readme.md
+		sqlgen.txt = sqlgen.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{C676FA0E-9F6F-414E-82BA-74ED97E6A9D3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{55A7CCB5-41C0-47C8-A3EB-EB9817C266D3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{B11CB194-50AD-43E6-AEC8-7FE438CCB644}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{EA3C6278-C73F-4FDC-8B92-FF5072820DD9}"
+	ProjectSection(SolutionItems) = preProject
+		build\common.props = build\common.props
+		build\index.cake = build\index.cake
+		build\util.cake = build\util.cake
+		build\version.cake = build\version.cake
+		build\version.props = build\version.props
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBLayer.Core", "src\DBLayer.Core\DBLayer.Core.csproj", "{EF97D0A4-93C0-4744-8CC9-50E0B224BFFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBLayer.Persistence", "src\DBLayer.Persistence\DBLayer.Persistence.csproj", "{937E96AB-6C68-4C03-A3E7-12E4C565FF20}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBLayer.Test", "test\DBLayer.Test\DBLayer.Test.csproj", "{608BB17A-5067-4CD5-A358-5CCCAAB030D4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EF97D0A4-93C0-4744-8CC9-50E0B224BFFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF97D0A4-93C0-4744-8CC9-50E0B224BFFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF97D0A4-93C0-4744-8CC9-50E0B224BFFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF97D0A4-93C0-4744-8CC9-50E0B224BFFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{937E96AB-6C68-4C03-A3E7-12E4C565FF20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{937E96AB-6C68-4C03-A3E7-12E4C565FF20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{937E96AB-6C68-4C03-A3E7-12E4C565FF20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{937E96AB-6C68-4C03-A3E7-12E4C565FF20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{608BB17A-5067-4CD5-A358-5CCCAAB030D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{608BB17A-5067-4CD5-A358-5CCCAAB030D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{608BB17A-5067-4CD5-A358-5CCCAAB030D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{608BB17A-5067-4CD5-A358-5CCCAAB030D4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EF97D0A4-93C0-4744-8CC9-50E0B224BFFF} = {55A7CCB5-41C0-47C8-A3EB-EB9817C266D3}
+		{937E96AB-6C68-4C03-A3E7-12E4C565FF20} = {55A7CCB5-41C0-47C8-A3EB-EB9817C266D3}
+		{608BB17A-5067-4CD5-A358-5CCCAAB030D4} = {B11CB194-50AD-43E6-AEC8-7FE438CCB644}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2EEF9524-C2A6-4356-9F11-FA37BDF24099}
+	EndGlobalSection
+EndGlobal
