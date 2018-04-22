@@ -689,8 +689,14 @@ namespace DBLayer.Persistence
             }
             else if (exp is UnaryExpression)
             {
-                var uny = (UnaryExpression)exp;
-                result = ExpressionInsertRouter<T>(dataSource,uny.Operand, away, ref index, ref newID, ref paramerList, generater);
+                if (away == DirAway.Right)
+                {
+                    result = ExpressionInsertRouter<T>(dataSource, GetReduceOrConstant(exp), away, ref index, ref newID, ref paramerList, generater);
+                }
+                else {
+                    var uny = (UnaryExpression)exp;
+                    result = ExpressionInsertRouter<T>(dataSource, uny.Operand, away, ref index, ref newID, ref paramerList, generater);
+                }
             }
             else if (exp is ConstantExpression)
             {
