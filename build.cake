@@ -61,26 +61,26 @@ Task("Test")
 	}
 });
 
-Task("Pack")
-	.Does(() =>
-{
-	var settings = new DotNetCorePackSettings
-	{
-		Configuration = build.Configuration,
-		VersionSuffix = build.Version.Suffix,
-		IncludeSymbols = true,
-		OutputDirectory = "./artifacts/packages"
-	};
-	foreach (var project in build.ProjectFiles)
-	{
-		DotNetCorePack(project.FullPath, settings);
-	}
-});
+// Task("Pack")
+// 	.Does(() =>
+// {
+// 	var settings = new DotNetCorePackSettings
+// 	{
+// 		Configuration = build.Configuration,
+// 		VersionSuffix = build.Version.Suffix,
+// 		IncludeSymbols = true,
+// 		OutputDirectory = "./artifacts/packages"
+// 	};
+// 	foreach (var project in build.ProjectFiles)
+// 	{
+// 		DotNetCorePack(project.FullPath, settings);
+// 	}
+// });
 
 Task("Default")
 	.IsDependentOn("Build")
 	.IsDependentOn("Test")
-	.IsDependentOn("Pack")
+	// .IsDependentOn("Pack")
 	.Does(() =>
 {
 	util.PrintInfo();
