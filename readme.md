@@ -1,11 +1,4 @@
-<p align="center">
-    <br>
-    <a href="http://www.wxius.com">
-        <img width="200" src="http://style.wxius.com/assets/frontend/layout/img/logos/logo-corp-red.png">
-    </a>
-    <br>
-</p>
-<br/>
+
 
 
 #### DBLayer is a orm db access project.
