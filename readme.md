@@ -5,7 +5,7 @@
 
 * it's light weight easy to use.
 * with spring.net is a good way to use i recommond use it.
-* Automatic generation of distributed ID
+* automatic generate distribute ID
 * pager code easy to use
 * support sqlserver、oracle、mysql
 
