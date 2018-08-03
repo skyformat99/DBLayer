@@ -18,7 +18,6 @@ namespace DBLayer.Persistence
             Condition = new T();
             UnionText=string.Empty;
             Table = string.Empty;
-            Key = string.Empty;
             Field = "*";
             Group = string.Empty;
             Order = string.Empty;
@@ -29,7 +28,6 @@ namespace DBLayer.Persistence
         public T Condition { get; set; }
         public string UnionText { get; set; }
         public string Table { get; set; }
-        public string Key { get; set; }
         public string Field { get; set; }
         public string Group { get; set; }
         public string Order { get;set; }

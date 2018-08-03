@@ -614,7 +614,6 @@ namespace DBLayer.Test
             var page=new Pager<SysUserCondition.Search>(){
              Condition=condition, 
              Table="sys_user",
-             Key="user_id",
              Order=string.Empty,
              Field = "*",
              WhereAction=(Condition,Where,Paramters)=>
@@ -658,7 +657,6 @@ namespace DBLayer.Test
                             SELECT * FROM sys_user
                             )",
                 Table = "alluser",
-                Key = "user_id",
                 Order = string.Empty,
                 Field = "*",
                 WhereAction = (Condition, Where, Paramters) =>
@@ -698,7 +696,6 @@ namespace DBLayer.Test
             {
                 Condition = condition,
                 Table = "t_d_user",
-                Key = "id",
                 Order = string.Empty,
                 Field = "*",
                 WhereAction = (Condition, Where, Paramters) =>
@@ -732,7 +729,6 @@ namespace DBLayer.Test
                             SELECT * FROM t_d_user
                             )",
                 Table = "alluser",
-                Key = "id",
                 Order = string.Empty,
                 Field = "*",
                 WhereAction = (Condition, Where, Paramters) =>
@@ -766,7 +762,6 @@ namespace DBLayer.Test
                             UNION ALL
                             SELECT * FROM t_d_user",
                 Table = "alluser",
-                Key = "id",
                 Order = string.Empty,
                 Field = "*",
                 WhereAction = (Condition, Where, Paramters) =>
@@ -918,7 +913,6 @@ namespace DBLayer.Test
             {
                 Condition = condition,
                 Table = "sht_sacrifice a",
-                Key = "scfe_id",
                 Order = "a.scfe_createtime DESC",
                 Field = "*",
                 WhereAction = (Condition, Where, Paramters) =>

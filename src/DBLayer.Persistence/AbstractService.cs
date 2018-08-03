@@ -2149,7 +2149,6 @@ namespace DBLayer.Persistence
         /// </summary>
         /// <param name="UnionText"></param>
         /// <param name="TableName"></param>
-        /// <param name="PrimaryKey"></param>
         /// <param name="FldName"></param>
         /// <param name="PageIndex"></param>
         /// <param name="PageSize"></param>
@@ -2159,9 +2158,9 @@ namespace DBLayer.Persistence
         /// <param name="parameter"></param>
         /// <param name="paramers"></param>
         /// <returns></returns>
-        private string GetPageCmdText(string UnionText,string TableName, string PrimaryKey, string FldName,ref int? PageIndex,ref int? PageSize, string Filter, string Group, string Sort, ref DbParameter[] parameter, params DbParameter[] paramers)
+        private string GetPageCmdText(string UnionText,string TableName, string FldName,ref int? PageIndex,ref int? PageSize, string Filter, string Group, string Sort, ref DbParameter[] parameter, params DbParameter[] paramers)
         {
-            var result= ThePagerGenerator.GetPageCmdText(this, UnionText,TableName, PrimaryKey, FldName,ref PageIndex,ref PageSize,Filter, Group,Sort,ref parameter,paramers);
+            var result= ThePagerGenerator.GetPageCmdText(this, UnionText,TableName, FldName,ref PageIndex,ref PageSize,Filter, Group,Sort,ref parameter,paramers);
             return result.ToString();
         }
         #region pager
@@ -2177,7 +2176,6 @@ namespace DBLayer.Persistence
 
             cmdText = GetPageCmdText(page.UnionText,
                 page.Table,
-                page.Key,
                 page.Field,
                 ref pageIndex,
                 ref pageSize,
@@ -2203,7 +2201,6 @@ namespace DBLayer.Persistence
             //page.Paramers;
             cmdText = GetPageCmdText(page.UnionText,
                 page.Table,
-                page.Key,
                 page.Field,
                 ref pageIndex,
                 ref pageSize,
@@ -2374,7 +2371,6 @@ namespace DBLayer.Persistence
             
             cmdText = GetPageCmdText(page.UnionText,
                 page.Table,
-                page.Key,
                 page.Field,
                 ref pageIndex,
                 ref pageSize,

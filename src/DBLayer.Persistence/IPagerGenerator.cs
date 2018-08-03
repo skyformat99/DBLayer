@@ -77,7 +77,6 @@ namespace DBLayer.Persistence
         /// </summary>
         /// <param name="UnionText"></param>
         /// <param name="TableName"></param>
-        /// <param name="PrimaryKey"></param>
         /// <param name="FldName"></param>
         /// <param name="PageIndex"></param>
         /// <param name="PageSize"></param>
@@ -87,7 +86,7 @@ namespace DBLayer.Persistence
         /// <param name="parameter"></param>
         /// <param name="paramers"></param>
         /// <returns></returns>
-        StringBuilder GetPageCmdText(DataSource dataSource, string UnionText, string TableName, string PrimaryKey, string FldName, ref int? PageIndex, ref int? PageSize, string Filter, string Group, string Sort, ref DbParameter[] parameter, params DbParameter[] paramers);
+        StringBuilder GetPageCmdText(DataSource dataSource, string UnionText, string TableName, string FldName, ref int? PageIndex, ref int? PageSize, string Filter, string Group, string Sort, ref DbParameter[] parameter, params DbParameter[] paramers);
 
 
     }
