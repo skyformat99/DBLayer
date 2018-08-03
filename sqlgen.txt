@@ -80,12 +80,12 @@
                                         sStatement = sStatement.Replace(nameInSQL, string.Format("'{0}'", sTempValue));
                                         break;
                                     default:
-                                        throw new Exception("【异常定义 2018-01-03 151219】未添加类型映射");
+                                        throw new Exception("【Exception defined 2018-01-03 151219】 type mapping not added");
                                 }
                             }
                             else
                             {
-                                throw new Exception(string.Format("【异常定义 2018-01-03 161857】不包含当前类型: 【{0}】", type.FullName));
+                                throw new Exception($"【Exception defined 2018-01-03 161857】type mapping not added: 【{type.FullName}】");
                             }
                         }
                     }
@@ -94,7 +94,7 @@
                 }
                 catch (Exception ex)
                 {
-                    return string.Format("输出原始SQL出现异常，@闻祖东。异常信息为：【{0}】", ex.ToString());
+                    return $" output the SQL Exception, ERROR: 【{ex.ToString()}】";
                 }
             }
 
