@@ -34,7 +34,6 @@ public IEnumerable<SysUser> Seach(SysUserCondition.Search condition)
     {
         Condition = condition,
         Table = "sys_user",
-        Key = "user_id",
         Order = string.Empty,
         Field = "*",
         WhereAction = (Condition, Where, Paramters) =>
