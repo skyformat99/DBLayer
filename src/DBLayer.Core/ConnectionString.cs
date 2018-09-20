@@ -1,10 +1,33 @@
-﻿using System.Collections.Specialized;
+﻿using DBLayer.Core.Utilities;
+using System.Collections.Specialized;
+using System.Linq;
 
 namespace DBLayer.Core
 {
     public class ConnectionString
     {
-        public NameValueCollection Properties { get; set; }
+        private NameValueCollection _properties;
+
+        public NameValueCollection Properties {
+            get {
+                return _properties;
+            }
+            set
+            {
+                if (value.AllKeys.Contains(PropertyConstants.PASSWORDKEY))
+                {
+                    var passwordKey = value[PropertyConstants.PASSWORDKEY];
+                    if (!string.IsNullOrEmpty(passwordKey))
+                    {
+                        var password = value[PropertyConstants.PASSWORD];
+                        //解密
+                        value[PropertyConstants.PASSWORD] = AES.Decode(password, passwordKey);
+                    }
+                }
+                _properties = value;
+            }
+        }
+
         public string ConnectionToken { get; set; }
 
         private string connectionString { get; set; }
@@ -17,34 +40,37 @@ namespace DBLayer.Core
         /// <returns></returns>
         private string ParsePropertyTokens(string str, NameValueCollection properties)
         {
-            string OPEN = "${";
-            string CLOSE = "}";
+            var OPEN = "${";
+            var CLOSE = "}";
 
-            string newString = str;
-            if (newString != null && properties != null)
+            
+            if (string.IsNullOrWhiteSpace(str) || (properties?.Count??0)<=0)
             {
-                int start = newString.IndexOf(OPEN);
-                int end = newString.IndexOf(CLOSE);
+                return str;
+            }
 
-                while (start > -1 && end > start)
+            var newString = str;
+            var start = newString.IndexOf(OPEN);
+            var end = newString.IndexOf(CLOSE);
+
+            while (start > -1 && end > start)
+            {
+                var prepend = newString.Substring(0, start);
+                var append = newString.Substring(end + CLOSE.Length);
+
+                var index = start + OPEN.Length;
+                var propName = newString.Substring(index, end - index);
+                var propValue = properties.Get(propName);
+                if (propValue == null)
                 {
-                    string prepend = newString.Substring(0, start);
-                    string append = newString.Substring(end + CLOSE.Length);
-
-                    int index = start + OPEN.Length;
-                    string propName = newString.Substring(index, end - index);
-                    string propValue = properties.Get(propName);
-                    if (propValue == null)
-                    {
-                        newString = prepend + propName + append;
-                    }
-                    else
-                    {
-                        newString = prepend + propValue + append;
-                    }
-                    start = newString.IndexOf(OPEN);
-                    end = newString.IndexOf(CLOSE);
+                    newString = prepend + propName + append;
                 }
+                else
+                {
+                    newString = prepend + propValue + append;
+                }
+                start = newString.IndexOf(OPEN);
+                end = newString.IndexOf(CLOSE);
             }
             return newString;
         }

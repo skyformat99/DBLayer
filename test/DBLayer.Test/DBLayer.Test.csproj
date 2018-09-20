@@ -68,18 +68,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="AtomTest.cs" />
     <Compile Include="SpringTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="App_Data\Config\datasource.config" />
     <None Include="App_Data\Config\log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="App_Data\Config\property-databases.config" />
-    <None Include="App_Data\Config\provider.config" />
     <None Include="App_Data\Config\Spring\persistence.test.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>

@@ -1,119 +1,52 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{937E96AB-6C68-4C03-A3E7-12E4C565FF20}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DBLayer.Persistence</RootNamespace>
-    <AssemblyName>DBLayer.Persistence</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <IsPackable>true</IsPackable>
+    <Description>This library is a .NET implementation of the OpenTracing API. To fully understand this platform API, it's helpful to be familiar with the OpenTracing project and terminology more generally.
+
+For the time being, mild backwards-incompatible changes may be made without changing the major version number. As OpenTracing and opentracing-csharp mature, backwards compatibility will become more of a priority.</Description>
+    <PackageTags>DBLayer.Core;mysql;sqlserver;oracle;pager</PackageTags>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+
+  <PropertyGroup Condition="'$(OS)'=='Windows_NT'">
+    <TargetFrameworks>$(TargetFrameworks);net461</TargetFrameworks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="AbstractService.cs" />
-    <Compile Include="AbstractServiceGeneric.cs" />
-    <Compile Include="Configuration\AtomSourceSection.cs" />
-    <Compile Include="Configuration\AtomSourceSettings.cs" />
-    <Compile Include="Configuration\AtomSource\AtomSourceElement.cs" />
-    <Compile Include="Configuration\AtomSource\AtomSourceElementCollection.cs" />
-    <Compile Include="Configuration\Base\ConfigurationElementCollection.cs" />
-    <Compile Include="Configuration\Base\ConfigurationElementEnumerator.cs" />
-    <Compile Include="DALExtensions.cs" />
-    <Compile Include="Data\DataSource.cs" />
-    <Compile Include="Data\DataSourceDeSerializer.cs" />
-    <Compile Include="Data\DataSourceFactory.cs" />
-    <Compile Include="Data\DbProvider.cs" />
-    <Compile Include="Data\DbProviderDeSerializer.cs" />
-    <Compile Include="Data\DbProviderFactory.cs" />
-    <Compile Include="Data\Property.cs" />
-    <Compile Include="Data\PropertyConstants.cs" />
-    <Compile Include="Data\PropertyDeSerializer.cs" />
-    <Compile Include="Data\PropertyFactory.cs" />
-    <Compile Include="FuncExtensions.cs" />
-    <Compile Include="IdentityGenerator.cs" />
-    <Compile Include="MySqlPagerGenerator.cs" />
-    <Compile Include="ObjectExtensions.cs" />
-    <Compile Include="OraclePagerGenerator.cs" />
-    <Compile Include="Pager.cs" />
-    <Compile Include="IPagerGenerator.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Configuration\PropertySection.cs" />
-    <Compile Include="Configuration\PropertySettings.cs" />
-    <Compile Include="Configuration\Property\AddElement.cs" />
-    <Compile Include="Configuration\Property\AddElementCollection.cs" />
-    <Compile Include="Configuration\Property\PropertyElement.cs" />
-    <Compile Include="Configuration\Property\PropertyElementCollection.cs" />
-    <Compile Include="Configuration\ProviderSection.cs" />
-    <Compile Include="Configuration\ProviderSettings.cs" />
-    <Compile Include="Configuration\Provider\ProviderElement.cs" />
-    <Compile Include="Configuration\Provider\ProviderElementCollection.cs" />
-    <Compile Include="SqlServerPagerGenerator.cs" />
-    <Compile Include="Utilities\EncryptHelper.cs" />
+    <Compile Remove="Configuration\**" />
+    <EmbeddedResource Remove="Configuration\**" />
+    <None Remove="Configuration\**" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="datasource.config" />
-    <None Include="datasource.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="packages.config" />
-    <None Include="property-databases.config" />
-    <None Include="property.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="provider.config" />
-    <None Include="provider.xsd">
-      <SubType>Designer</SubType>
-    </None>
+    <Compile Remove="Data\DataSourceDeSerializer.cs" />
+    <Compile Remove="Data\DataSourceFactory.cs" />
+    <Compile Remove="Data\DbProviderDeSerializer.cs" />
+    <Compile Remove="Data\DbProviderFactory.cs" />
+    <Compile Remove="Data\Property.cs" />
+    <Compile Remove="Data\PropertyConstants.cs" />
+    <Compile Remove="Data\PropertyDeSerializer.cs" />
+    <Compile Remove="Data\PropertyFactory.cs" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\DBLayer.Core\DBLayer.Core.csproj">
-      <Project>{ef97d0a4-93c0-4744-8cc9-50e0b224bfff}</Project>
-      <Name>DBLayer.Core</Name>
-    </ProjectReference>
+    <None Remove="property-databases.config" />
+    <None Remove="property.xsd" />
+    <None Remove="provider.config" />
+    <None Remove="provider.xsd" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
+  <ItemGroup>
+    <PackageReference Include="Common.Logging" Version="3.4.1" />
+    <PackageReference Include="Common.Logging.Core" Version="3.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DBLayer.Core\DBLayer.Core.csproj" />
+  </ItemGroup>
+
 </Project>

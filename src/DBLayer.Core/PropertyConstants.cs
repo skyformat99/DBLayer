@@ -1,4 +1,4 @@
-﻿namespace DBLayer.Persistence.Data
+﻿namespace DBLayer.Core
 {
     public static class PropertyConstants
     {

@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace DBLayer.Persistence.Utilities
+namespace DBLayer.Core.Utilities
 {
     /// <summary> 
     /// 加密
@@ -11,19 +11,19 @@ namespace DBLayer.Persistence.Utilities
     public class AES
     {
         //默认密钥向量
-        private static byte[] Keys = { 0x41, 0x72, 0x65, 0x79, 0x6F, 0x75, 0x6D, 0x79, 0x53, 0x6E, 0x6F, 0x77, 0x6D, 0x61, 0x6E, 0x3F };
-        private static readonly int KeyLength = 32;
+        private static readonly byte[] keys = { 0x41, 0x72, 0x65, 0x79, 0x6F, 0x75, 0x6D, 0x79, 0x53, 0x6E, 0x6F, 0x77, 0x6D, 0x61, 0x6E, 0x3F };
+        private static readonly int keyLength = 32;
         public static string Encode(string encryptString, string encryptKey)
         {
-            if (encryptKey.Length > KeyLength)
+            if (encryptKey.Length > keyLength)
             {
-                encryptKey = encryptKey.Substring(0, KeyLength);
+                encryptKey = encryptKey.Substring(0, keyLength);
             }
-            encryptKey = encryptKey.PadRight(KeyLength, ' ');
+            encryptKey = encryptKey.PadRight(keyLength, ' ');
 
             RijndaelManaged rijndaelProvider = new RijndaelManaged();
-            rijndaelProvider.Key = Encoding.UTF8.GetBytes(encryptKey.Substring(0, KeyLength));
-            rijndaelProvider.IV = Keys;
+            rijndaelProvider.Key = Encoding.UTF8.GetBytes(encryptKey.Substring(0, keyLength));
+            rijndaelProvider.IV = keys;
             ICryptoTransform rijndaelEncrypt = rijndaelProvider.CreateEncryptor();
 
             byte[] inputData = Encoding.UTF8.GetBytes(encryptString);
@@ -36,15 +36,15 @@ namespace DBLayer.Persistence.Utilities
         {
             try
             {
-                if (decryptKey.Length > KeyLength)
+                if (decryptKey.Length > keyLength)
                 {
-                    decryptKey = decryptKey.Substring(0, KeyLength);
+                    decryptKey = decryptKey.Substring(0, keyLength);
                 }
-                decryptKey = decryptKey.PadRight(KeyLength, ' ');
+                decryptKey = decryptKey.PadRight(keyLength, ' ');
 
                 RijndaelManaged rijndaelProvider = new RijndaelManaged();
                 rijndaelProvider.Key = Encoding.UTF8.GetBytes(decryptKey);
-                rijndaelProvider.IV = Keys;
+                rijndaelProvider.IV = keys;
                 ICryptoTransform rijndaelDecrypt = rijndaelProvider.CreateDecryptor();
 
                 byte[] inputData = Convert.FromBase64String(decryptString);
@@ -67,9 +67,9 @@ namespace DBLayer.Persistence.Utilities
     public class DES
     {
         //默认密钥向量
-        private static byte[] Keys = { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
+        private static readonly byte[] keys = { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
 
-        private static readonly int KeyLength = 8;
+        private static readonly int keyLength = 8;
         /// <summary>
         /// DES加密字符串
         /// </summary>
@@ -78,13 +78,13 @@ namespace DBLayer.Persistence.Utilities
         /// <returns>加密成功返回加密后的字符串,失败返回源串</returns>
         public static string Encode(string encryptString, string encryptKey)
         {
-            if (encryptKey.Length > KeyLength)
+            if (encryptKey.Length > keyLength)
             {
-                encryptKey = encryptKey.Substring(0, KeyLength);
+                encryptKey = encryptKey.Substring(0, keyLength);
             }
-            encryptKey = encryptKey.PadRight(KeyLength, ' ');
-            byte[] rgbKey = Encoding.UTF8.GetBytes(encryptKey.Substring(0, KeyLength));
-            byte[] rgbIV = Keys;
+            encryptKey = encryptKey.PadRight(keyLength, ' ');
+            byte[] rgbKey = Encoding.UTF8.GetBytes(encryptKey.Substring(0, keyLength));
+            byte[] rgbIV = keys;
             byte[] inputByteArray = Encoding.UTF8.GetBytes(encryptString);
             DESCryptoServiceProvider dCSP = new DESCryptoServiceProvider();
             MemoryStream mStream = new MemoryStream();
@@ -105,13 +105,13 @@ namespace DBLayer.Persistence.Utilities
         {
             try
             {
-                if (decryptKey.Length > KeyLength)
+                if (decryptKey.Length > keyLength)
                 {
-                    decryptKey = decryptKey.Substring(0, KeyLength);
+                    decryptKey = decryptKey.Substring(0, keyLength);
                 }
-                decryptKey = decryptKey.PadRight(KeyLength, ' ');
+                decryptKey = decryptKey.PadRight(keyLength, ' ');
                 byte[] rgbKey = Encoding.UTF8.GetBytes(decryptKey);
-                byte[] rgbIV = Keys;
+                byte[] rgbIV = keys;
                 byte[] inputByteArray = Convert.FromBase64String(decryptString);
                 DESCryptoServiceProvider DCSP = new DESCryptoServiceProvider();
 
