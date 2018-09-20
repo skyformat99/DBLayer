@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DBLayer.Persistence.Data
+﻿namespace DBLayer.Persistence.Data
 {
     public static class PropertyConstants
     {

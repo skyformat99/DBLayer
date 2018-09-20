@@ -1,10 +1,9 @@
 ﻿
 
-using System.Collections.Generic;
 using DBLayer.Persistence.Configuration;
-using DBLayer.Persistence.Configuration.Provider;
 using DBLayer.Persistence.Configuration.Property;
 using System;
+using System.Collections.Generic;
 
 namespace DBLayer.Persistence.Data
 {

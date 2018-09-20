@@ -1,9 +1,6 @@
 
 #region Using
 
-using System.Collections.Specialized;
-using System.Xml;
-using DBLayer.Persistence.Configuration.Provider;
 using DBLayer.Persistence.Configuration.Property;
 #endregion 
 

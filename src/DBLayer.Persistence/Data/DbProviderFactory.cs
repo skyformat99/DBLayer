@@ -1,9 +1,9 @@
 ﻿
-using System.Collections.Generic;
+using DBLayer.Core.Interface;
 using DBLayer.Persistence.Configuration;
 using DBLayer.Persistence.Configuration.Provider;
-using DBLayer.Core.Interface;
 using System;
+using System.Collections.Generic;
 
 namespace DBLayer.Persistence.Data
 {

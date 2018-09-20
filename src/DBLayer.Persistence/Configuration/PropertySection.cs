@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using DBLayer.Persistence.Configuration.Property;
 using System.Configuration;
-using DBLayer.Persistence.Configuration.Property;
 
 namespace DBLayer.Persistence.Configuration
 {

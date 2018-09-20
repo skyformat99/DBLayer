@@ -1,12 +1,9 @@
-﻿using System;
+﻿using DBLayer.Persistence.Data;
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DBLayer.Core;
-using DBLayer.Persistence.Data;
-using System.Data;
 
 namespace DBLayer.Persistence
 {

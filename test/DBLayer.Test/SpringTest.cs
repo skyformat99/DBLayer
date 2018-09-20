@@ -1,11 +1,9 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DBLayer.Core;
-using Spring.Context.Support;
-using DBLayer.Persistence;
-using DBLayer.Core.Interface;
+﻿using DBLayer.Core;
 using DBLayer.Core.Condition;
-using System.Text;
+using DBLayer.Persistence;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Spring.Context.Support;
+using System;
 using System.Collections.Generic;
 
 namespace DBLayer.Test

@@ -1,10 +1,8 @@
 
 #region Using
 
-using System.Collections.Specialized;
-using System.Xml;
-using DBLayer.Persistence.Configuration.Provider;
 using DBLayer.Core.Interface;
+using DBLayer.Persistence.Configuration.Provider;
 #endregion 
 
 namespace DBLayer.Persistence.Data

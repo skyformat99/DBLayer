@@ -1,22 +1,17 @@
 
 #region Using
-using System;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Xml;
-using DBLayer.Persistence.Configuration;
-using DBLayer.Persistence.Configuration.AtomSource;
-using DBLayer.Core.Interface;
-using DBLayer.Persistence.Utilities;
 using DBLayer.Core;
+using DBLayer.Persistence.Configuration.AtomSource;
+using DBLayer.Persistence.Utilities;
+using System.Linq;
 #endregion 
 
 namespace DBLayer.Persistence.Data
 {
-	/// <summary>
-	/// Summary description for DataSourceDeSerializer.
-	/// </summary>
-	public sealed class DataSourceDeSerializer
+    /// <summary>
+    /// Summary description for DataSourceDeSerializer.
+    /// </summary>
+    public sealed class DataSourceDeSerializer
 	{
         /// <summary>
         /// Deserialize a DataSource object

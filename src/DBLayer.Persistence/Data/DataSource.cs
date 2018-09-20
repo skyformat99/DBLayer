@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data;
-using System.Data.Common;
-using System.Threading.Tasks;
-using System.Reflection;
-using Common.Logging;
+﻿using Common.Logging;
 using DBLayer.Core;
 using DBLayer.Core.Interface;
-using DBLayer.Persistence;
+using System;
+using System.Data;
+using System.Data.Common;
+using System.Reflection;
+using System.Threading.Tasks;
 
 
 namespace DBLayer.Persistence.Data
