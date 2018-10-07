@@ -110,9 +110,7 @@ namespace DBLayer.Persistence
         public T GetEntity<T>(string cmdText, DbTransaction trans = null, CommandType commandType = CommandType.Text, params DbParameter[] paramers) where T : new()
         {
             T entity = new T();
-            using (var reader = trans == null ? 
-                base.CreateDataReader(cmdText, commandType, paramers) :
-                base.CreateDataReader(trans, cmdText, commandType, paramers))
+            using (var reader = base.CreateDataReader(cmdText, trans, commandType, paramers))
             {
                 if (reader.Read())
                 {
@@ -199,9 +197,7 @@ namespace DBLayer.Persistence
         public async Task<T> GetEntityAsync<T>(string cmdText, DbTransaction trans = null, CommandType commandType = CommandType.Text, params DbParameter[] paramers) where T : new()
         {
             T entity = default(T);
-            using (var reader = trans == null ?
-               await base.CreateDataReaderAsync(cmdText, commandType, paramers) :
-               await  base.CreateDataReaderAsync(trans, cmdText, commandType, paramers))
+            using (var reader = await  base.CreateDataReaderAsync(cmdText, trans, commandType, paramers))
             {
                 if (reader.Read())
                 {
@@ -287,9 +283,7 @@ namespace DBLayer.Persistence
         public IDictionary<string, object> GetEntityDic(string cmdText, DbTransaction trans = null, CommandType commandType = CommandType.Text, params DbParameter[] parameters)
         {
             var entity = new Dictionary<string, object>();
-            using (var reader = trans == null ? 
-                base.CreateDataReader(cmdText, commandType, parameters) : 
-                base.CreateDataReader(trans,cmdText, commandType, parameters))
+            using (var reader = base.CreateDataReader(cmdText, trans, commandType, parameters))
             {
                 if (reader.Read())
                 {
@@ -370,9 +364,7 @@ namespace DBLayer.Persistence
         public async Task<IDictionary<string, object>> GetEntityDicAsync(string cmdText, DbTransaction trans = null, CommandType commandType = CommandType.Text, params DbParameter[] parameters)
         {
             var entity = new Dictionary<string, object>();
-            using (var reader = trans == null ?
-                await base.CreateDataReaderAsync(cmdText, commandType, parameters) :
-                await base.CreateDataReaderAsync(trans, cmdText, commandType, parameters))
+            using (var reader = await base.CreateDataReaderAsync(cmdText, trans, commandType, parameters))
             {
                 if (reader.Read())
                 {
@@ -461,9 +453,7 @@ namespace DBLayer.Persistence
         public IList<IDictionary<string, object>> GetEntityDicList(string cmdText, DbTransaction trans = null, CommandType commandType = CommandType.Text, params DbParameter[] parameters)
         {
             var entityList = new List<IDictionary<string, object>>();
-            using (var reader = trans == null ? 
-                base.CreateDataReader(cmdText, commandType, parameters) :
-                base.CreateDataReader(trans, cmdText, commandType, parameters))
+            using (var reader = base.CreateDataReader(cmdText, trans, commandType, parameters))
             {
                 while (reader.Read())
                 {
@@ -545,9 +535,7 @@ namespace DBLayer.Persistence
         public async Task<IList<IDictionary<string, object>>> GetEntityDicListAsync(string cmdText, DbTransaction trans = null, CommandType commandType = CommandType.Text, params DbParameter[] parameters)
         {
             var entityList = new List<IDictionary<string, object>>();
-            using (var reader = trans == null ?
-                await base.CreateDataReaderAsync(cmdText, commandType, parameters) :
-                await base.CreateDataReaderAsync(trans, cmdText, commandType, parameters))
+            using (var reader = await base.CreateDataReaderAsync(cmdText, trans, commandType, parameters))
             {
                 while (reader.Read())
                 {
@@ -640,9 +628,7 @@ namespace DBLayer.Persistence
         public IList<T> GetEntityList<T>(string cmdText, DbTransaction trans = null, CommandType commandType = CommandType.Text, params DbParameter[] paramers) where T : new()
         {
             var entityList = new List<T>();
-            using (var reader = trans == null ? 
-                base.CreateDataReader(cmdText, commandType, paramers) :
-                base.CreateDataReader(trans, cmdText, commandType, paramers))
+            using (var reader = base.CreateDataReader(cmdText, trans, commandType, paramers))
             {
                 while (reader.Read())
                 {
@@ -732,9 +718,7 @@ namespace DBLayer.Persistence
         public async Task<IList<T>> GetEntityListAsync<T>(string cmdText, DbTransaction trans = null, CommandType commandType = CommandType.Text, params DbParameter[] paramers) where T : new()
         {
             var entityList = new List<T>();
-            using (var readerTask = trans == null ?
-                base.CreateDataReaderAsync(cmdText, commandType, paramers) :
-                base.CreateDataReaderAsync(trans, cmdText, commandType, paramers))
+            using (var readerTask = base.CreateDataReaderAsync(cmdText, trans, commandType, paramers))
             {
                 using (var reader=await readerTask)
                 {
@@ -824,9 +808,7 @@ namespace DBLayer.Persistence
         public IList<T> GetList<T>(string cmdText, DbTransaction trans = null, CommandType commandType = CommandType.Text, params DbParameter[] paramers)
         {
             var entityList = new List<T>();
-            using (var reader = trans == null ? 
-                base.CreateDataReader(cmdText, commandType, paramers) : 
-                base.CreateDataReader(trans,cmdText, commandType, paramers))
+            using (var reader = base.CreateDataReader(cmdText, trans, commandType, paramers))
             {
                 while (reader.Read())
                 {
@@ -892,9 +874,7 @@ namespace DBLayer.Persistence
         public async Task<IList<T>> GetListAsync<T>(string cmdText, DbTransaction trans = null, CommandType commandType = CommandType.Text, params DbParameter[] paramers)
         {
             var entityList = new List<T>();
-            using (var readerTask = trans == null ?
-                base.CreateDataReaderAsync(cmdText, commandType, paramers) :
-                base.CreateDataReaderAsync(trans, cmdText, commandType, paramers))
+            using (var readerTask =base.CreateDataReaderAsync(cmdText, trans, commandType, paramers))
             {
                 using (var reader = await readerTask)
                 {
@@ -986,9 +966,7 @@ namespace DBLayer.Persistence
         public IDictionary<string, string> GetEntityDicStr(string cmdText, DbTransaction trans = null, CommandType commandType = CommandType.Text, params DbParameter[] parameters)
         {
             var entity = new Dictionary<string, string>();
-            using (var reader = trans == null ? 
-                base.CreateDataReader(cmdText, commandType, parameters) :
-                base.CreateDataReader(trans, cmdText, commandType, parameters))
+            using (var reader = base.CreateDataReader(cmdText, trans, commandType, parameters))
             {
                 if (reader.Read())
                 {
@@ -1071,9 +1049,7 @@ namespace DBLayer.Persistence
         public async Task<IDictionary<string, string>> GetEntityDicStrAsync(string cmdText, DbTransaction trans = null, CommandType commandType = CommandType.Text, params DbParameter[] parameters)
         {
             var entity = new Dictionary<string, string>();
-            using (var readerTask = trans == null ?
-                base.CreateDataReaderAsync(cmdText, commandType, parameters) :
-                base.CreateDataReaderAsync(trans, cmdText, commandType, parameters))
+            using (var readerTask = base.CreateDataReaderAsync(cmdText, trans, commandType, parameters))
             {
                 using (var reader = await readerTask) {
                     if (reader.Read())
@@ -1163,9 +1139,7 @@ namespace DBLayer.Persistence
         public IList<IDictionary<string, string>> GetEntityDicStrList(string cmdText, DbTransaction trans = null, CommandType commandType = CommandType.Text, params DbParameter[] parameters)
         {
             var entityList = new List<IDictionary<string, string>>();
-            using (var reader = trans == null ? 
-                base.CreateDataReader(cmdText, commandType, parameters) : 
-                base.CreateDataReader(trans,cmdText, commandType, parameters))
+            using (var reader =base.CreateDataReader(cmdText, trans, commandType, parameters))
             {
                 while (reader.Read())
                 {
@@ -1248,9 +1222,7 @@ namespace DBLayer.Persistence
         public async Task<IList<IDictionary<string, string>>> GetEntityDicStrListAsync(string cmdText, DbTransaction trans = null, CommandType commandType = CommandType.Text, params DbParameter[] parameters)
         {
             var entityList = new List<IDictionary<string, string>>();
-            using (var readerTask =trans==null?
-                base.CreateDataReaderAsync(cmdText, commandType, parameters):
-                base.CreateDataReaderAsync(trans,cmdText, commandType, parameters))
+            using (var readerTask =base.CreateDataReaderAsync(cmdText, trans, commandType, parameters))
             {
                 using (var reader = await readerTask)
                 {
@@ -1281,28 +1253,20 @@ namespace DBLayer.Persistence
             var paramerList = new List<DbParameter>();
             var insertStr = this.Insert<T>(expression, ref newID, ref paramerList, TheGenerator);
             var allInsert = CreateInsertAllSql<T>();
-            var insertCmd = new StringBuilder();
+            var cmdText = new StringBuilder();
 
-            insertCmd.AppendFormat("{0}{1}", allInsert, insertStr);
+            cmdText.AppendFormat("{0}{1}", allInsert, insertStr);
 
             if (newID == null)
             {
                 //var cmdText = ThePagerGenerator.GetInsertCmdText<T>(this, ref paramerList, insertCmd);
-                newID = ThePagerGenerator.InsertExecutor<T>(this, insertCmd, paramerList, trans);
+                newID = ThePagerGenerator.InsertExecutor<T>(this, cmdText, paramerList, trans);
                 //newID = trans == null ?
                 //    base.ExecuteScalar(cmdText.ToString(), CommandType.Text, paramerList.ToArray()) :
                 //    base.ExecuteScalar(trans, cmdText.ToString(), CommandType.Text, paramerList.ToArray());
             }
             else {
-                var cmdText = insertCmd;
-                if (trans == null)
-                {
-                    base.ExecuteNonQuery(cmdText.ToString(), CommandType.Text, paramerList.ToArray());
-                }
-                else
-                {
-                    base.ExecuteNonQuery(trans, cmdText.ToString(), CommandType.Text, paramerList.ToArray());
-                }
+                base.ExecuteNonQuery(cmdText.ToString(), trans, CommandType.Text, paramerList.ToArray());
             }
             return newID;
         }
@@ -1331,26 +1295,18 @@ namespace DBLayer.Persistence
         public object InsertEntity<T>(T entity, DbTransaction trans = null, params string[] exclusionList) 
             where T : new()
         {
-            var insertCmd = new StringBuilder();
+            var cmdText = new StringBuilder();
             object newID = null;
 
-            var paramerList = CreateInsertSql(ref insertCmd, entity, ref newID, exclusionList);
+            var paramerList = CreateInsertSql(ref cmdText, entity, ref newID, exclusionList);
 
             var para = paramerList.ToArray();
             if (newID == null)
             {
-                return ThePagerGenerator.InsertExecutor<T>(this, insertCmd, paramerList, trans);
+                return ThePagerGenerator.InsertExecutor<T>(this, cmdText, paramerList, trans);
             }
 
-            var retval = -1;
-            if (trans == null)
-            {
-                retval = base.ExecuteNonQuery(insertCmd.ToString(), CommandType.Text, para);
-            }
-            else
-            {
-                retval = base.ExecuteNonQuery(trans, insertCmd.ToString(), CommandType.Text, para);
-            }
+            var retval = base.ExecuteNonQuery(cmdText.ToString(), trans, CommandType.Text, para);
 
             if (retval <= 0)
             {
@@ -1391,15 +1347,7 @@ namespace DBLayer.Persistence
             }
             
             var cmdText = insertCmd.ToString();
-            var retval = -1;
-            if (trans == null)
-            {
-                retval = await base.ExecuteNonQueryAsync(cmdText, CommandType.Text, paramerList.ToArray());
-            }
-            else
-            {
-                retval = await base.ExecuteNonQueryAsync(trans, cmdText, CommandType.Text, paramerList.ToArray());
-            }
+            var retval = await base.ExecuteNonQueryAsync(cmdText, trans, CommandType.Text, paramerList.ToArray());
 
             if (retval <= 0)
             {
@@ -1446,15 +1394,7 @@ namespace DBLayer.Persistence
                 return await ThePagerGenerator.InsertExecutorAsync<T>(this, insertCmd, paramerList, trans);
             }
 
-            var retval = -1;
-            if (trans == null)
-            {
-                retval = await base.ExecuteNonQueryAsync(insertCmd.ToString(), CommandType.Text, para);
-            }
-            else
-            {
-                retval = await base.ExecuteNonQueryAsync(trans, insertCmd.ToString(), CommandType.Text, para);
-            }
+            var retval = await base.ExecuteNonQueryAsync(insertCmd.ToString(), trans, CommandType.Text, para);
 
             if (retval <= 0)
             {
@@ -1501,9 +1441,7 @@ namespace DBLayer.Persistence
             var updateStr = this.Update<T>(expression,ref paramerList);
             var allUpdate=this.CreateUpdateAllSql<T>();
             var cmdText = string.Format("{0}{1}{2}", allUpdate, updateStr, whereStr);
-            result = trans == null ? 
-                base.ExecuteNonQuery(cmdText, CommandType.Text, paramerList.ToArray()): 
-                base.ExecuteNonQuery(trans,cmdText, CommandType.Text, paramerList.ToArray());
+            result = base.ExecuteNonQuery(cmdText, trans, CommandType.Text, paramerList.ToArray());
             return result;
         }
 
@@ -1519,9 +1457,7 @@ namespace DBLayer.Persistence
             var returnValue = 0;
 
             var paramerList = CreateUpdateSql(ref cmdText, entity, exclusionList);
-            returnValue =trans==null? 
-                base.ExecuteNonQuery(cmdText, CommandType.Text, paramerList.ToArray()): 
-                base.ExecuteNonQuery(trans,cmdText, CommandType.Text, paramerList.ToArray());
+            returnValue = base.ExecuteNonQuery(cmdText, trans, CommandType.Text, paramerList.ToArray());
 
             return returnValue;
         }
@@ -1542,9 +1478,7 @@ namespace DBLayer.Persistence
             var updateStr = this.Update<T>(expression, ref paramerList);
             var allUpdate = this.CreateUpdateAllSql<T>();
             var cmdText = string.Format("{0}{1}{2}", allUpdate, updateStr, whereStr);
-            var result = trans == null ?
-                await base.ExecuteNonQueryAsync(cmdText, CommandType.Text, paramerList.ToArray()) :
-                await base.ExecuteNonQueryAsync(trans, cmdText, CommandType.Text, paramerList.ToArray());
+            var result = await base.ExecuteNonQueryAsync(cmdText, trans, CommandType.Text, paramerList.ToArray());
             return result;
         }
 
@@ -1559,9 +1493,7 @@ namespace DBLayer.Persistence
             var cmdText = "";
             
             var paramerList = CreateUpdateSql(ref cmdText, entity, exclusionList);
-            var result = trans == null ?
-                await base.ExecuteNonQueryAsync(cmdText, CommandType.Text, paramerList.ToArray()) :
-                await base.ExecuteNonQueryAsync(trans, cmdText, CommandType.Text, paramerList.ToArray());
+            var result = await base.ExecuteNonQueryAsync(cmdText, trans, CommandType.Text, paramerList.ToArray());
 
             return result;
         }
@@ -1584,9 +1516,7 @@ namespace DBLayer.Persistence
             var whereStr = this.Where<T>(where, ref paramerList);
             var allDelete = this.CreateDeleteAllSql<T>();
             var cmdText = string.Format("{0}{1}", allDelete, whereStr);
-            var result = trans == null ?
-                base.ExecuteNonQuery(cmdText, CommandType.Text, paramerList.ToArray()) :
-                base.ExecuteNonQuery(trans, cmdText, CommandType.Text, paramerList.ToArray());
+            var result = base.ExecuteNonQuery(cmdText, trans, CommandType.Text, paramerList.ToArray());
 
             return result;
         }
@@ -1600,10 +1530,8 @@ namespace DBLayer.Persistence
         {
             var cmdText = "";
             var paramerList = CreateDelSql(ref cmdText, true, typeof(T), ID, exclusionList);
-            return 
-                trans==null?
-                base.ExecuteNonQuery(cmdText, CommandType.Text, paramerList.ToArray()):
-                base.ExecuteNonQuery(trans, cmdText, CommandType.Text, paramerList.ToArray());
+            var result = base.ExecuteNonQuery(cmdText, trans, CommandType.Text, paramerList.ToArray());
+            return result;
         }
 
         /// <summary>
@@ -1616,10 +1544,8 @@ namespace DBLayer.Persistence
         {
             var cmdText = "";
             var paramerList = CreateDeleteSql(ref cmdText, entity, exclusionList);
-            return 
-                trans==null?
-                base.ExecuteNonQuery(cmdText, CommandType.Text, paramerList.ToArray()):
-                base.ExecuteNonQuery(trans,cmdText, CommandType.Text, paramerList.ToArray());
+            var result= base.ExecuteNonQuery(cmdText, trans, CommandType.Text, paramerList.ToArray());
+            return result;
         }
 
         /// <summary>
@@ -1637,9 +1563,7 @@ namespace DBLayer.Persistence
             var whereStr = this.Where<T>(where, ref paramerList);
             var allDelete = this.CreateDeleteAllSql<T>();
             var cmdText = string.Format("{0}{1}", allDelete, whereStr);
-            var result = trans == null ?
-                await base.ExecuteNonQueryAsync(cmdText, CommandType.Text, paramerList.ToArray()) :
-                await base.ExecuteNonQueryAsync(trans,cmdText, CommandType.Text, paramerList.ToArray());
+            var result = await base.ExecuteNonQueryAsync(cmdText, trans, CommandType.Text, paramerList.ToArray());
 
             return result;
         }
@@ -1654,9 +1578,7 @@ namespace DBLayer.Persistence
             var cmdText = "";
             var paramerList = CreateDelSql(ref cmdText, true, typeof(T), ID, exclusionList);
 
-            var result=trans == null ?
-                await base.ExecuteNonQueryAsync(cmdText, CommandType.Text, paramerList.ToArray()) :
-                await base.ExecuteNonQueryAsync(trans, cmdText, CommandType.Text, paramerList.ToArray());
+            var result= await base.ExecuteNonQueryAsync(cmdText, trans, CommandType.Text, paramerList.ToArray());
             return result;
                 
         }
@@ -1671,9 +1593,7 @@ namespace DBLayer.Persistence
         {
             var cmdText = "";
             var paramerList = CreateDeleteSql(ref cmdText, entity, exclusionList);
-            var result=trans == null ?
-                await base.ExecuteNonQueryAsync(cmdText, CommandType.Text, paramerList.ToArray()) :
-                await base.ExecuteNonQueryAsync(trans, cmdText, CommandType.Text, paramerList.ToArray());
+            var result= await base.ExecuteNonQueryAsync(cmdText, trans, CommandType.Text, paramerList.ToArray());
             return result;
         }
         #endregion
@@ -1689,7 +1609,7 @@ namespace DBLayer.Persistence
         /// <returns>SQL 语句所影响的行数</returns>
         public int ExecuteNonQuery(string cmdText, params DbParameter[] paramers)
         {
-            var returnValue = this.ExecuteNonQuery(cmdText, null, CommandType.Text, paramers);
+            var returnValue = base.ExecuteNonQuery(cmdText, null, CommandType.Text, paramers);
 
             return returnValue;
         }
@@ -1702,7 +1622,7 @@ namespace DBLayer.Persistence
         /// <returns>SQL 语句所影响的行数</returns>
         public int ExecuteNonQuery(string cmdText, DbTransaction trans = null, params DbParameter[] paramers)
         {
-            var returnValue = this.ExecuteNonQuery(cmdText, trans, CommandType.Text, paramers);
+            var returnValue = base.ExecuteNonQuery(cmdText, trans, CommandType.Text, paramers);
 
             return returnValue;
         }
@@ -1715,26 +1635,11 @@ namespace DBLayer.Persistence
         public int ExecuteNonQuery(string cmdText, object obj, DbTransaction trans = null)
         {
             var parameters = this.ToDbParameters(obj);
-            var returnValue = this.ExecuteNonQuery(cmdText, trans, CommandType.Text, parameters);
+            var returnValue = base.ExecuteNonQuery(cmdText, trans, CommandType.Text, parameters);
 
             return returnValue;
         }
         
-        /// <summary>
-        /// 执行 SQL 语句
-        /// </summary>
-        /// <param name="cmdText">>SQL 语句</param>
-        /// <param name="paramers">参数数组</param>
-        /// <returns>SQL 语句所影响的行数</returns>
-        public int ExecuteNonQuery(string cmdText, DbTransaction trans=null, CommandType commandType = CommandType.Text, params DbParameter[] paramers)
-        {
-            var returnValue =
-                trans==null?
-                base.ExecuteNonQuery(cmdText, commandType, paramers):
-                base.ExecuteNonQuery(trans, cmdText, CommandType.Text, paramers);
-
-            return returnValue;
-        }
 
         /// <summary>
         /// 执行 SQL 语句
@@ -1757,7 +1662,7 @@ namespace DBLayer.Persistence
         /// <returns>SQL 语句所影响的行数</returns>
         public async Task<int> ExecuteNonQueryAsync(string cmdText, DbTransaction trans = null, params DbParameter[] paramers)
         {
-            var returnValue = await this.ExecuteNonQueryAsync(cmdText, trans, CommandType.Text, paramers);
+            var returnValue = await base.ExecuteNonQueryAsync(cmdText, trans, CommandType.Text, paramers);
 
             return returnValue;
         }
@@ -1770,26 +1675,12 @@ namespace DBLayer.Persistence
         public async Task<int> ExecuteNonQueryAsync(string cmdText, object obj, DbTransaction trans = null)
         {
             var parameters = this.ToDbParameters(obj);
-            var returnValue = await this.ExecuteNonQueryAsync(cmdText, trans, CommandType.Text, parameters);
+            var returnValue = await base.ExecuteNonQueryAsync(cmdText, trans, CommandType.Text, parameters);
 
             return returnValue;
         }
         
-        /// <summary>
-        /// 执行 SQL 语句
-        /// </summary>
-        /// <param name="cmdText">>SQL 语句</param>
-        /// <param name="paramers">参数数组</param>
-        /// <returns>SQL 语句所影响的行数</returns>
-        public async Task<int> ExecuteNonQueryAsync(string cmdText, DbTransaction trans = null, CommandType commandType = CommandType.Text, params DbParameter[] paramers)
-        {
-            var returnValue =
-                trans == null ?
-                await base.ExecuteNonQueryAsync(cmdText, commandType, paramers) :
-                await base.ExecuteNonQueryAsync(trans, cmdText, CommandType.Text, paramers);
-
-            return returnValue;
-        }
+       
         #endregion
 
         #region ExecuteScalar
@@ -1802,7 +1693,7 @@ namespace DBLayer.Persistence
         /// <returns></returns>
         public T ExecuteScalar<T>(string cmdText, params DbParameter[] paramers) 
         {
-            var result = ExecuteScalar<T>(cmdText, null, paramers);
+            var result = this.ExecuteScalar<T>(cmdText, null, paramers);
             return result;
         }
         /// <summary>
@@ -1814,7 +1705,7 @@ namespace DBLayer.Persistence
         /// <returns></returns>
         public T ExecuteScalar<T>(string cmdText, DbTransaction trans = null, params DbParameter[] paramers)
         {
-            var result = ExecuteScalar<T>(cmdText, trans, CommandType.Text, paramers);
+            var result = this.ExecuteScalar<T>(cmdText, trans, CommandType.Text, paramers);
             return result;
         }
         /// <summary>
@@ -1827,7 +1718,7 @@ namespace DBLayer.Persistence
         public T ExecuteScalar<T>(string cmdText, object obj, DbTransaction trans = null)
         {
             var parameters = this.ToDbParameters(obj);
-            var result = ExecuteScalar<T>(cmdText, trans, parameters);
+            var result =this.ExecuteScalar<T>(cmdText, trans, parameters);
             return result;
         }
         
@@ -1842,7 +1733,7 @@ namespace DBLayer.Persistence
         /// <returns></returns>
         public T ExecuteScalar<T>(string cmdText, DbTransaction trans = null, CommandType commandType = CommandType.Text, params DbParameter[] paramers) 
         {
-            var obj=ExecuteScalar(cmdText, trans, commandType, paramers);
+            var obj = base.ExecuteScalar(cmdText, trans, commandType, paramers);
             var result=GetSingle<T>(obj);
             return result;
         }
@@ -1854,7 +1745,7 @@ namespace DBLayer.Persistence
         /// <returns>返回首行首列</returns>
         public object ExecuteScalar(string cmdText, params DbParameter[] paramers)
         {
-            var returnObj = this.ExecuteScalar(cmdText, null, CommandType.Text, paramers);
+            var returnObj = base.ExecuteScalar(cmdText, null, CommandType.Text, paramers);
 
             return returnObj;
         }
@@ -1866,7 +1757,7 @@ namespace DBLayer.Persistence
         /// <returns>返回首行首列</returns>
         public object ExecuteScalar(string cmdText, DbTransaction trans = null, params DbParameter[] paramers)
         {
-            var returnObj = this.ExecuteScalar(cmdText, trans, CommandType.Text, paramers);
+            var returnObj = base.ExecuteScalar(cmdText, trans, CommandType.Text, paramers);
 
             return returnObj;
         }
@@ -1879,26 +1770,12 @@ namespace DBLayer.Persistence
         public object ExecuteScalar(string cmdText, object obj, DbTransaction trans = null)
         {
             var parameters = this.ToDbParameters(obj);
-            var returnObj = this.ExecuteScalar(cmdText, trans, CommandType.Text, parameters);
+            var returnObj = base.ExecuteScalar(cmdText, trans, CommandType.Text, parameters);
 
             return returnObj;
         }
         
-        /// <summary>
-        /// 执行数据库操作，返回首行首列
-        /// </summary>
-        /// <param name="cmdText">SQL 语句</param>
-        /// <param name="paramers">参数数组</param>
-        /// <returns>返回首行首列</returns>
-        public object ExecuteScalar(string cmdText, DbTransaction trans = null, CommandType commandType = CommandType.Text, params DbParameter[] paramers)
-        {
-            var returnObj =
-                trans == null ?
-                base.ExecuteScalar(cmdText, commandType, paramers) :
-                base.ExecuteScalar(trans, cmdText, commandType, paramers);
-
-            return returnObj;
-        }
+        
 
         /// <summary>
         /// 执行数据库操作，返回首行首列
@@ -1908,7 +1785,7 @@ namespace DBLayer.Persistence
         /// <returns>返回首行首列</returns>
         public async Task<object> ExecuteScalarAsync(string cmdText, params DbParameter[] paramers)
         {
-            var result = await this.ExecuteScalarAsync(cmdText, null, CommandType.Text, paramers);
+            var result = await base.ExecuteScalarAsync(cmdText, null, CommandType.Text, paramers);
             return result;
         }
         /// <summary>
@@ -1919,7 +1796,7 @@ namespace DBLayer.Persistence
         /// <returns>返回首行首列</returns>
         public async Task<object> ExecuteScalarAsync(string cmdText, DbTransaction trans = null, params DbParameter[] paramers)
         {
-            var result = await this.ExecuteScalarAsync(cmdText, trans, CommandType.Text, paramers);
+            var result = await base.ExecuteScalarAsync(cmdText, trans, CommandType.Text, paramers);
 
             return result;
         }
@@ -1932,24 +1809,10 @@ namespace DBLayer.Persistence
         public async Task<object> ExecuteScalarAsync(string cmdText, object obj, DbTransaction trans = null)
         {
             var parameters = this.ToDbParameters(obj);
-            var result = await this.ExecuteScalarAsync(cmdText, trans, CommandType.Text, parameters);
+            var result = await base.ExecuteScalarAsync(cmdText, trans, CommandType.Text, parameters);
             return result;
         }
-        /// <summary>
-        /// 执行数据库操作，返回首行首列
-        /// </summary>
-        /// <param name="cmdText">SQL 语句</param>
-        /// <param name="paramers">参数数组</param>
-        /// <returns>返回首行首列</returns>
-        public async Task<object> ExecuteScalarAsync(string cmdText, DbTransaction trans = null, CommandType commandType = CommandType.Text, params DbParameter[] paramers)
-        {
-            var result =
-                trans == null ?
-                await base.ExecuteScalarAsync(cmdText, commandType, paramers) :
-                await base.ExecuteScalarAsync(trans, cmdText, commandType, paramers);
-
-            return result;
-        }
+       
         #endregion
         
         #region IsExists
@@ -2000,15 +1863,11 @@ namespace DBLayer.Persistence
         /// <returns>记录是否存在,true:表示存在记录,false:表示不存在记录</returns>
         public bool IsExists(string cmdText, DbTransaction trans=null, CommandType commondType = CommandType.Text, params DbParameter[] paramers)
         {
-
-            var obj =
-                trans == null ?
-                base.ExecuteScalar(cmdText, commondType, paramers) :
-                base.ExecuteScalar(trans, cmdText, commondType, paramers);
+            var obj = base.ExecuteScalar(cmdText, trans, commondType, paramers);
 
             var result = true;
 
-            if ((Object.Equals(obj, null)) || (Object.Equals(obj, System.DBNull.Value)))
+            if ((object.Equals(obj, null)) || (object.Equals(obj, System.DBNull.Value)))
             {
                 result = false;
             }
@@ -2063,16 +1922,12 @@ namespace DBLayer.Persistence
         /// <returns>记录是否存在,true:表示存在记录,false:表示不存在记录</returns>
         public async Task<bool> IsExistsAsync(string cmdText, DbTransaction trans = null, CommandType commondType = CommandType.Text, params DbParameter[] paramers)
         {
-
-            var objTask =
-                trans == null ?
-                base.ExecuteScalarAsync(cmdText, commondType, paramers) :
-                base.ExecuteScalarAsync(trans, cmdText, commondType, paramers);
+            var objTask = base.ExecuteScalarAsync(cmdText, trans, commondType, paramers);
 
             var result = true;
 
             var obj = await objTask;
-            if ((Object.Equals(obj, null)) || (Object.Equals(obj, System.DBNull.Value)))
+            if ((object.Equals(obj, null)) || (object.Equals(obj, System.DBNull.Value)))
             {
                 result = false;
             }
@@ -2090,7 +1945,7 @@ namespace DBLayer.Persistence
         /// <returns>数据集</returns>
         public DataSet GetDataSet(string cmdText, params DbParameter[] paramers)
         {
-            var returnDataSet = base.CreateDataSet(cmdText, CommandType.Text, paramers);
+            var returnDataSet = this.GetDataSet(cmdText,null, CommandType.Text, paramers);
 
             return returnDataSet;
         }
@@ -2128,10 +1983,7 @@ namespace DBLayer.Persistence
         /// <returns>数据集</returns>
         public DataSet GetDataSet(string cmdText, DbTransaction trans = null, CommandType commondType = CommandType.Text, params DbParameter[] paramers)
         {
-            var returnDataSet = 
-                trans == null ? 
-                base.CreateDataSet(cmdText, commondType, paramers) :
-                base.CreateDataSet(trans,cmdText, commondType, paramers);
+            var returnDataSet = base.CreateDataSet(cmdText, trans, commondType, paramers);
 
             return returnDataSet;
         }
@@ -2160,8 +2012,9 @@ namespace DBLayer.Persistence
         /// <returns></returns>
         private string GetPageCmdText(string UnionText,string TableName, string FldName,ref int? PageIndex,ref int? PageSize, string Filter, string Group, string Sort, ref DbParameter[] parameter, params DbParameter[] paramers)
         {
-            var result= ThePagerGenerator.GetPageCmdText(this, UnionText,TableName, FldName,ref PageIndex,ref PageSize,Filter, Group,Sort,ref parameter,paramers);
-            return result.ToString();
+            var cmdText = ThePagerGenerator.GetPageCmdText(this, UnionText,TableName, FldName,ref PageIndex,ref PageSize,Filter, Group,Sort,ref parameter,paramers);
+            var result = ReplaceParameter(cmdText.ToString());
+            return result;
         }
         #region pager
         private IDataReader GetResultByPager<T>(Pager<T> page) where T : BasePageCondition, new()
@@ -2188,18 +2041,17 @@ namespace DBLayer.Persistence
             page.Condition.PageIndex = pageIndex;
             page.Condition.PageSize = pageSize;
 
-            var reader = base.CreateDataReader(cmdText, CommandType.Text, parameter);
+            var reader = base.CreateDataReader(cmdText, null, CommandType.Text, parameter);
             return reader;
         }
         private Task<DbDataReader> GetResultByPagerAsync<T>(Pager<T> page) where T : BasePageCondition, new()
         {
-            var cmdText = "";
             DbParameter[] parameter = null;
             page.Execute();
             var pageIndex = page.Condition.PageIndex;
             var pageSize = page.Condition.PageSize;
             //page.Paramers;
-            cmdText = GetPageCmdText(page.UnionText,
+            var cmdText = GetPageCmdText(page.UnionText,
                 page.Table,
                 page.Field,
                 ref pageIndex,
@@ -2212,7 +2064,7 @@ namespace DBLayer.Persistence
             page.Condition.PageIndex = pageIndex;
             page.Condition.PageSize = pageSize;
 
-            var reader = base.CreateDataReaderAsync(cmdText, CommandType.Text, parameter);
+            var reader = base.CreateDataReaderAsync(cmdText, null, CommandType.Text, parameter);
             return reader;
         }
 
@@ -2685,39 +2537,39 @@ namespace DBLayer.Persistence
 
             return cmdText;
         }
-        /// <summary>
-        /// 生成添加SQL语句
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        private string CreateSelectAllSql<T>(string top="")
-        {
-            var entityType = typeof(T);
-            var tableName = string.Empty; ;
-            var dataTable = entityType.GetDataTableAttribute(out tableName);
+        ///// <summary>
+        ///// 生成添加SQL语句
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="entity"></param>
+        ///// <returns></returns>
+        //private string CreateSelectAllSql<T>(string top="")
+        //{
+        //    var entityType = typeof(T);
+        //    var tableName = string.Empty; ;
+        //    var dataTable = entityType.GetDataTableAttribute(out tableName);
 
-            var cmdText = $"SELECT {top} * FROM {tableName} ";
-            return cmdText;
-        }
+        //    var cmdText = $"SELECT {top} * FROM {tableName} ";
+        //    return cmdText;
+        //}
 
-        /// <summary>
-        /// 生成添加SQL语句
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        private string CreateSelectAllEntityDicSql<T>(string top="",params string[] exclusionList)
-        {
-            var entityType = typeof(T);
-            var tableName = string.Empty; ;
-            var dataTable = entityType.GetDataTableAttribute(out tableName);
+        ///// <summary>
+        ///// 生成添加SQL语句
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="entity"></param>
+        ///// <returns></returns>
+        //private string CreateSelectAllEntityDicSql<T>(string top="",params string[] exclusionList)
+        //{
+        //    var entityType = typeof(T);
+        //    var tableName = string.Empty; ;
+        //    var dataTable = entityType.GetDataTableAttribute(out tableName);
 
-            var fields = CreateAllEntityDicSql<T>(exclusionList);
-            var cmdText = $"SELECT {top} {fields} FROM {tableName} ";
+        //    var fields = CreateAllEntityDicSql<T>(exclusionList);
+        //    var cmdText = $"SELECT {top} {fields} FROM {tableName} ";
 
-            return cmdText;
-        }
+        //    return cmdText;
+        //}
 
         private string CreateAllEntityDicSql<T>(params string[] exclusionList) 
         {
@@ -2929,6 +2781,8 @@ namespace DBLayer.Persistence
             }
         }
         #endregion
+
         
+
     }
 }
