@@ -1,11 +1,21 @@
-﻿using DBLayer.Core.Utilities;
+﻿using DBLayer.Core;
+using DBLayer.Core.Interface;
+using DBLayer.Core.Utilities;
 using System.Collections.Specialized;
 using System.Linq;
 
-namespace DBLayer.Core
+namespace DBLayer.Persistence
 {
-    public class ConnectionString
+    public class ConnectionString: IConnectionString
     {
+        public ConnectionString() { }
+        public ConnectionString(NameValueCollection properties,string connectionToken)
+        {
+            this.Properties = properties;
+            this.ConnectionToken = connectionToken;
+            _connectionString = ParsePropertyTokens(ConnectionToken, Properties);
+
+        }
         private NameValueCollection _properties;
 
         public NameValueCollection Properties {
@@ -28,9 +38,21 @@ namespace DBLayer.Core
             }
         }
 
-        public string ConnectionToken { get; set; }
+        public string ConnectionToken { get;set; }
 
-        private string connectionString { get; set; }
+
+        private string _connectionString;
+        public string ConnectionValue
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_connectionString))
+                {
+                    _connectionString = ParsePropertyTokens(ConnectionToken, Properties);
+                }
+                return _connectionString;
+            }
+        }
 
         /// <summary>
         /// Replace properties by their values in the given string
@@ -77,11 +99,11 @@ namespace DBLayer.Core
 
         public override string ToString()
         {
-            if(string.IsNullOrWhiteSpace(connectionString))
+            if(string.IsNullOrWhiteSpace(_connectionString))
             {
-                connectionString = ParsePropertyTokens(ConnectionToken, Properties);
+                _connectionString = ParsePropertyTokens(ConnectionToken, Properties);
             }
-            return connectionString;
+            return _connectionString;
         }
     }
 }

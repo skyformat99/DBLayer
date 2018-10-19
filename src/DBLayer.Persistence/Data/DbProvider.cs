@@ -29,7 +29,8 @@ namespace DBLayer.Persistence.Data
 #if NET461
                 dbProviderFactory = DbProviderFactories.GetFactory(this.ProviderName);
 #else
-                dbProviderFactory = (DbProviderFactory)Activator.CreateInstance(Type.GetType(this.ProviderName));
+                var factoryType = Type.GetType(this.ProviderName);
+                dbProviderFactory = (DbProviderFactory)factoryType.GetField("Instance").GetValue(null);
 #endif
             }
             return dbProviderFactory;

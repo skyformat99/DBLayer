@@ -29,7 +29,8 @@ namespace DBLayer.Persistence
         private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         
         public AbstractService():base() { }
-        public AbstractService(DataSource dataSource):base(dataSource){}
+        public AbstractService(IDbProvider dbProvider, IConnectionString connectionString, IGenerator generator, IPagerGenerator pagerGenerator) 
+            :base(dbProvider, connectionString, generator, pagerGenerator) {}
 
         #region public method
         

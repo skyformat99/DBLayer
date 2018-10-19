@@ -35,7 +35,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBLayer.Persistence", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBLayer.Test", "test\DBLayer.Test\DBLayer.Test.csproj", "{608BB17A-5067-4CD5-A358-5CCCAAB030D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbLayer.CoreTest", "test\DbLayer.CoreTest\DbLayer.CoreTest.csproj", "{B0532586-EBF2-4FB5-9599-1A2F25B1FB45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbLayer.CoreTest", "test\DbLayer.CoreTest\DbLayer.CoreTest.csproj", "{B0532586-EBF2-4FB5-9599-1A2F25B1FB45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBLayer.Core.Extensions", "src\DBLayer.Core.Extensions\DBLayer.Core.Extensions.csproj", "{5CAA3919-0110-4449-9F8A-487CDCB6D1C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{B0532586-EBF2-4FB5-9599-1A2F25B1FB45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0532586-EBF2-4FB5-9599-1A2F25B1FB45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0532586-EBF2-4FB5-9599-1A2F25B1FB45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CAA3919-0110-4449-9F8A-487CDCB6D1C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CAA3919-0110-4449-9F8A-487CDCB6D1C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CAA3919-0110-4449-9F8A-487CDCB6D1C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CAA3919-0110-4449-9F8A-487CDCB6D1C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +74,7 @@ Global
 		{937E96AB-6C68-4C03-A3E7-12E4C565FF20} = {55A7CCB5-41C0-47C8-A3EB-EB9817C266D3}
 		{608BB17A-5067-4CD5-A358-5CCCAAB030D4} = {B11CB194-50AD-43E6-AEC8-7FE438CCB644}
 		{B0532586-EBF2-4FB5-9599-1A2F25B1FB45} = {B11CB194-50AD-43E6-AEC8-7FE438CCB644}
+		{5CAA3919-0110-4449-9F8A-487CDCB6D1C4} = {55A7CCB5-41C0-47C8-A3EB-EB9817C266D3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2EEF9524-C2A6-4356-9F11-FA37BDF24099}

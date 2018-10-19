@@ -15,10 +15,17 @@ namespace DBLayer.Persistence.Data
         private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         #region 接口
-        public ConnectionString ConnectionString { get; set; }
+        public IConnectionString ConnectionString { get; set; }
 
         public IDbProvider DbProvider { get; set; }
         #endregion
+
+        public DataSource() { }
+        public DataSource(IDbProvider dbProvider, ConnectionString connectionString)
+        {
+            this.DbProvider = dbProvider;
+            this.ConnectionString = connectionString;
+        }
 
         #region 连接命令
 
@@ -29,7 +36,7 @@ namespace DBLayer.Persistence.Data
         internal DbConnection CreateConnection()
         {
             var dbConn = DbProvider.GetDbProviderFactory().CreateConnection();
-            dbConn.ConnectionString = ConnectionString.ToString();
+            dbConn.ConnectionString = ConnectionString.ConnectionValue;
 
             return dbConn;
         }
@@ -63,11 +70,17 @@ namespace DBLayer.Persistence.Data
             }
 
             var dbCmd = DbProvider.GetDbProviderFactory().CreateCommand();
-            dbCmd.Connection = trans.Connection;
+            
             dbCmd.CommandText = cmdText;
             dbCmd.CommandType = commandType;
-            if (trans!=null) {
+            if (trans != null)
+            {
+                dbCmd.Connection = trans.Connection;
                 dbCmd.Transaction = trans;
+            }
+            else {
+                dbCmd.Connection = CreateConnection();
+                dbCmd.Connection.Open();
             }
             
             if (paramers != null){

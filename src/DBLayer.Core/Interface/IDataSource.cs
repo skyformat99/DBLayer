@@ -6,7 +6,7 @@
         /// Gets or sets the connection string.
         /// </summary>
         /// <value>The connection string.</value>
-        ConnectionString ConnectionString { set; get; }
+        IConnectionString ConnectionString { set; get; }
 
         /// <summary>
         /// Gets or sets the db provider.

@@ -33,10 +33,12 @@ namespace DBLayer.Persistence
         public IPagerGenerator ThePagerGenerator { get; set; }
         #endregion
         public AbstractService() { }
-        public AbstractService(DataSource dataSource) 
+        public AbstractService(IDbProvider dbProvider,IConnectionString connectionString, IGenerator generator, IPagerGenerator pagerGenerator) 
         {
-            base.DbProvider = dataSource.DbProvider;
-            base.ConnectionString = dataSource.ConnectionString;
+            base.DbProvider = dbProvider;
+            base.ConnectionString = connectionString;
+            this.TheGenerator = generator;
+            this.ThePagerGenerator = pagerGenerator;
         }
         #region public method
         
