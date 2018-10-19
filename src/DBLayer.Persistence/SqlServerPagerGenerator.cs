@@ -94,9 +94,7 @@ namespace DBLayer.Persistence
             var cmdText = new StringBuilder();
             cmdText.AppendFormat("{0};{1}", insertCmd, dataSource.DbProvider.SelectKey);
 
-            var newID = trans == null ?
-                        dataSource.ExecuteScalar(cmdText.ToString(), CommandType.Text, paramerList.ToArray()) :
-                        dataSource.ExecuteScalar(trans, cmdText.ToString(), CommandType.Text, paramerList.ToArray());
+            var newID = dataSource.ExecuteScalar( cmdText.ToString(), trans, CommandType.Text, paramerList.ToArray());
 
             return newID;
         }
@@ -114,9 +112,7 @@ namespace DBLayer.Persistence
             var cmdText = new StringBuilder();
             cmdText.AppendFormat("{0};{1}", insertCmd, dataSource.DbProvider.SelectKey);
 
-            var newID = trans == null ?
-                        dataSource.ExecuteScalarAsync(cmdText.ToString(), CommandType.Text, paramerList.ToArray()) :
-                        dataSource.ExecuteScalarAsync(trans, cmdText.ToString(), CommandType.Text, paramerList.ToArray());
+            var newID = dataSource.ExecuteScalarAsync(cmdText.ToString(), trans, CommandType.Text, paramerList.ToArray());
 
             return newID;
         }

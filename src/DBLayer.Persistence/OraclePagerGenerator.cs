@@ -141,14 +141,8 @@ namespace DBLayer.Persistence
 
             var paras = paramerList.ToArray();
 
-            if (trans == null)
-            {
-                dataSource.ExecuteNonQuery(cmdText.ToString(), CommandType.Text, paras);
-            }
-            else
-            {
-                dataSource.ExecuteNonQuery(trans, cmdText.ToString(), CommandType.Text, paras);
-            }
+            dataSource.ExecuteNonQuery(cmdText.ToString(), trans, CommandType.Text, paras);
+
             object newID = paras[paras.Length - 1].Value;
             return newID;
         }
@@ -180,14 +174,7 @@ namespace DBLayer.Persistence
             var paras = paramerList.ToArray();
 
             var retval = new Task<int>(() => 0);
-            if (trans == null)
-            {
-                retval = dataSource.ExecuteNonQueryAsync(cmdText.ToString(), CommandType.Text, paras);
-            }
-            else
-            {
-                retval = dataSource.ExecuteNonQueryAsync(trans, cmdText.ToString(), CommandType.Text, paras);
-            }
+            retval = dataSource.ExecuteNonQueryAsync(cmdText.ToString(), trans, CommandType.Text, paras);
 
             Task.WaitAll(retval);
             var newID = new Task<object>(() => null);
