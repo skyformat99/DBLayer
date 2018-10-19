@@ -1,4 +1,5 @@
 ﻿using DBLayer.Core;
+using DBLayer.Core.Interface;
 using DBLayer.Persistence.Data;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBLayer.Persistence
+namespace DBLayer.Persistence.PagerGenerator
 {
-    public class SqlServerPagerGenerator : IPagerGenerator
+    public class MySqlPagerGenerator : IPagerGenerator
     {
         /// <summary>
         /// 查询所有数据-不包含字段*
@@ -20,14 +21,14 @@ namespace DBLayer.Persistence
         /// <param name="paramerList"></param>
         /// <param name="top"></param>
         /// <returns></returns>
-        public StringBuilder GetSelectCmdText<T>(DataSource dataSource, ref List<DbParameter> paramerList, StringBuilder whereStr, StringBuilder orderStr, int? top = null)
+        public StringBuilder GetSelectCmdText<T>(IDataSource dataSource, ref List<DbParameter> paramerList, StringBuilder whereStr, StringBuilder orderStr, int? top = null)
         {
             var cmdText = new StringBuilder();
             var topStr = new StringBuilder();
             if (top != null && top.Value > 0)
             {
                 var topparameter = dataSource.DbProvider.ParameterPrefix + "topParameter";
-                topStr.AppendFormat("TOP({0})", topparameter);
+                topStr.AppendFormat("LIMIT 0,{0}", topparameter);
                 paramerList.Add(dataSource.CreateParameter(topparameter, top.Value));
             }
 
@@ -36,7 +37,7 @@ namespace DBLayer.Persistence
 
             var dataTable = entityType.GetDataTableAttribute(out tableName);
 
-            cmdText.AppendFormat("SELECT {1} * FROM {0} {2} {3} ", tableName, topStr, whereStr, orderStr);
+            cmdText.AppendFormat("SELECT * FROM {0} {2} {3} {1} ", tableName, topStr, whereStr, orderStr);
 
             return cmdText;
         }
@@ -49,14 +50,14 @@ namespace DBLayer.Persistence
         /// <param name="top"></param>
         /// <param name="exclusionList"></param>
         /// <returns></returns>
-        public StringBuilder GetSelectDictionaryCmdText<T>(DataSource dataSource, ref List<DbParameter> paramerList, StringBuilder whereStr, StringBuilder orderStr, int? top = null, params string[] exclusionList)
+        public StringBuilder GetSelectDictionaryCmdText<T>(IDataSource dataSource, ref List<DbParameter> paramerList, StringBuilder whereStr, StringBuilder orderStr, int? top = null, params string[] exclusionList)
         {
             var cmdText = new StringBuilder();
             var topStr = new StringBuilder();
             if (top != null && top.Value > 0)
             {
                 var topparameter = dataSource.DbProvider.ParameterPrefix + "topParameter";
-                topStr.AppendFormat("TOP({0})", topparameter);
+                topStr.AppendFormat("LIMIT 0,{0}topParameter", topparameter);
                 paramerList.Add(dataSource.CreateParameter(topparameter, top.Value));
             }
 
@@ -66,7 +67,7 @@ namespace DBLayer.Persistence
             var dataTable = entityType.GetDataTableAttribute(out tableName);
             var fields = CreateAllEntityDicSql<T>(exclusionList);
 
-            cmdText.AppendFormat("SELECT {2} {1} FROM {0} {3} {4} ", tableName, fields, topStr, whereStr, orderStr);
+            cmdText.AppendFormat("SELECT {1} FROM {0} {3} {4} {2} ", tableName, fields, topStr, whereStr, orderStr);
 
             return cmdText;
         }
@@ -88,13 +89,12 @@ namespace DBLayer.Persistence
         /// <param name="paramerList">参数列表</param>
         /// <param name="trans">会话</param>
         /// <returns>Id</returns>
-        public object InsertExecutor<T>(DataSource dataSource, StringBuilder insertCmd, List<DbParameter> paramerList, DbTransaction trans = null)
+        public object InsertExecutor<T>(IDataSource dataSource, StringBuilder insertCmd, List<DbParameter> paramerList, DbTransaction trans = null)
         {
-
             var cmdText = new StringBuilder();
             cmdText.AppendFormat("{0};{1}", insertCmd, dataSource.DbProvider.SelectKey);
 
-            var newID = dataSource.ExecuteScalar( cmdText.ToString(), trans, CommandType.Text, paramerList.ToArray());
+            var newID = dataSource.ExecuteScalar(cmdText.ToString(), trans,  CommandType.Text, paramerList.ToArray());
 
             return newID;
         }
@@ -106,17 +106,16 @@ namespace DBLayer.Persistence
         /// <param name="paramerList">参数列表</param>
         /// <param name="trans">会话</param>
         /// <returns>Id</returns>
-        public Task<object> InsertExecutorAsync<T>(DataSource dataSource, StringBuilder insertCmd, List<DbParameter> paramerList, DbTransaction trans = null)
+        public Task<object> InsertExecutorAsync<T>(IDataSource dataSource, StringBuilder insertCmd, List<DbParameter> paramerList, DbTransaction trans = null)
         {
 
             var cmdText = new StringBuilder();
             cmdText.AppendFormat("{0};{1}", insertCmd, dataSource.DbProvider.SelectKey);
 
-            var newID = dataSource.ExecuteScalarAsync(cmdText.ToString(), trans, CommandType.Text, paramerList.ToArray());
+            var newID = dataSource.ExecuteScalarAsync(cmdText.ToString(), trans,  CommandType.Text, paramerList.ToArray());
 
             return newID;
         }
-
         /// <summary>
         /// 查询条件 InFunc
         /// </summary>
@@ -127,10 +126,10 @@ namespace DBLayer.Persistence
         {
             var leftString = left();
             var rightString = right();
-            var result = new StringBuilder();
-            result.AppendFormat("{0} IN (SELECT [value] FROM f_SPLIT({1},default))", leftString, rightString);
-            return result;
 
+            var result = new StringBuilder();
+            result.AppendFormat("{0} IN ({1})", leftString, rightString);
+            return result;
         }
         /// <summary>
         /// 查询条件 NotInFunc
@@ -143,7 +142,7 @@ namespace DBLayer.Persistence
             var leftString = left();
             var rightString = right();
             var result = new StringBuilder();
-            result.AppendFormat("{0} NOT IN (SELECT [value] FROM f_SPLIT({1},default))", leftString, rightString);
+            result.AppendFormat("{0} NOT IN ({1})", leftString, rightString);
             return result;
         }
         /// <summary>
@@ -151,6 +150,7 @@ namespace DBLayer.Persistence
         /// </summary>
         /// <param name="UnionText"></param>
         /// <param name="TableName"></param>
+        /// <param name="PrimaryKey"></param>
         /// <param name="FldName"></param>
         /// <param name="PageIndex"></param>
         /// <param name="PageSize"></param>
@@ -160,7 +160,7 @@ namespace DBLayer.Persistence
         /// <param name="parameter"></param>
         /// <param name="paramers"></param>
         /// <returns></returns>
-        public StringBuilder GetPageCmdText(DataSource dataSource, string UnionText, string TableName, string FldName, ref int? PageIndex, ref int? PageSize, string Filter, string Group, string Sort, ref DbParameter[] parameter, params DbParameter[] paramers)
+        public StringBuilder GetPageCmdText(IDataSource dataSource, string UnionText, string TableName, string FldName, ref int? PageIndex, ref int? PageSize, string Filter, string Group, string Sort, ref DbParameter[] parameter, params DbParameter[] paramers)
         {
             var cmdText = new StringBuilder();
             var strPageSize = -1;
@@ -168,8 +168,6 @@ namespace DBLayer.Persistence
             var strEndRow = -1;
             var strFilter = "";
             var strGroup = "";
-            var strSort = "";
-
             PageIndex = PageIndex ?? 1;
             PageSize = PageSize ?? 20;
 
@@ -198,22 +196,17 @@ namespace DBLayer.Persistence
 
             if (!string.IsNullOrEmpty(Sort))
             {
-                strSort = " ORDER BY " + Sort;
+                strGroup = " ORDER BY " + Sort + " ";
             }
-            else
+
+            if (!string.IsNullOrWhiteSpace(UnionText))
             {
-                strSort = " ORDER BY (SELECT 0)";
+                TableName = string.Format("({0}){1}", UnionText, TableName);
             }
 
-            cmdText.AppendLine(UnionText);
-            //
-            cmdText.AppendFormat("SELECT * FROM ( SELECT ROW_NUMBER() OVER({0}) AS ROWNUM, {1} FROM {2} {3} {4}) AS QUERY_T1 WHERE ROWNUM >= {5}strStartRow AND ROWNUM <= {5}strEndRow ORDER BY ROWNUM;",
-                 strSort, FldName, TableName, strFilter, strGroup, dataSource.DbProvider.ParameterPrefix);
+            cmdText.AppendFormat("SELECT {0} FROM {1} {2} {3} {4} LIMIT {5}strStartRow,{5}strEndRow ;",
+                FldName, TableName, strFilter, strGroup, Sort, dataSource.DbProvider.ParameterPrefix);
 
-            //cmdText.AppendFormat("SELECT * FROM (SELECT {0},ROW_NUMBER() OVER({1}) AS row FROM {2}{3}{4}) a WHERE row BETWEEN {5}strStartRow AND {5}strEndRow;", 
-            //    FldName, strSort, TableName, strFilter, strGroup, dataSource.DbProvider.ParameterPrefix);
-
-            cmdText.AppendLine(UnionText);
             if (string.IsNullOrEmpty(strGroup))
             {
                 cmdText.AppendFormat("SELECT COUNT(0) AS TotalRecords FROM {0}{1}", TableName, strFilter);
@@ -224,9 +217,8 @@ namespace DBLayer.Persistence
             }
 
             var paras = new List<DbParameter>();
-            paras.Add(dataSource.CreateParameter(dataSource.DbProvider.ParameterPrefix + "Pagesize", PageSize));
-            paras.Add(dataSource.CreateParameter(dataSource.DbProvider.ParameterPrefix + "strStartRow", strStartRow));
-            paras.Add(dataSource.CreateParameter(dataSource.DbProvider.ParameterPrefix + "strEndRow", strEndRow));
+            paras.Add(dataSource.CreateParameter(dataSource.DbProvider.ParameterPrefix + "strStartRow", strStartRow - 1));
+            paras.Add(dataSource.CreateParameter(dataSource.DbProvider.ParameterPrefix + "strEndRow", PageSize));
 
             if (paramers != null && paramers.Count() > 0)
             {
@@ -237,7 +229,6 @@ namespace DBLayer.Persistence
 
             return cmdText;
         }
-
         #region private
         private StringBuilder CreateAllEntityDicSql<T>(params string[] exclusionList)
         {

@@ -1,11 +1,10 @@
-﻿using DBLayer.Persistence.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBLayer.Persistence
+namespace DBLayer.Core.Interface
 {
     public interface IPagerGenerator
     {
@@ -17,7 +16,7 @@ namespace DBLayer.Persistence
         /// <param name="paramerList"></param>
         /// <param name="top"></param>
         /// <returns></returns>
-        StringBuilder GetSelectCmdText<T>(DataSource dataSource, ref List<DbParameter> paramerList, StringBuilder whereStr, StringBuilder orderStr, int? top = null);
+        StringBuilder GetSelectCmdText<T>(IDataSource dataSource, ref List<DbParameter> paramerList, StringBuilder whereStr, StringBuilder orderStr, int? top = null);
         /// <summary>
         /// 查询所有数据-包含字段
         /// </summary>
@@ -27,7 +26,7 @@ namespace DBLayer.Persistence
         /// <param name="top"></param>
         /// <param name="exclusionList"></param>
         /// <returns></returns>
-        StringBuilder GetSelectDictionaryCmdText<T>(DataSource dataSource, ref List<DbParameter> paramerList, StringBuilder whereStr, StringBuilder orderStr , int? top = null, params string[] exclusionList);
+        StringBuilder GetSelectDictionaryCmdText<T>(IDataSource dataSource, ref List<DbParameter> paramerList, StringBuilder whereStr, StringBuilder orderStr , int? top = null, params string[] exclusionList);
          /// <summary>
         /// 在insert中id自动编号的处理
         /// </summary>
@@ -44,7 +43,7 @@ namespace DBLayer.Persistence
         /// <param name="paramerList">参数列表</param>
         /// <param name="trans">会话</param>
         /// <returns>Id</returns>
-        object InsertExecutor<T>(DataSource dataSource, StringBuilder insertCmd, List<DbParameter> paramerList, DbTransaction trans = null);
+        object InsertExecutor<T>(IDataSource dataSource, StringBuilder insertCmd, List<DbParameter> paramerList, DbTransaction trans = null);
         /// <summary>
         /// 执行Insert
         /// </summary>
@@ -53,7 +52,7 @@ namespace DBLayer.Persistence
         /// <param name="paramerList">参数列表</param>
         /// <param name="trans">会话</param>
         /// <returns>Id</returns>
-        Task<object> InsertExecutorAsync<T>(DataSource dataSource, StringBuilder insertCmd, List<DbParameter> paramerList, DbTransaction trans = null);
+        Task<object> InsertExecutorAsync<T>(IDataSource dataSource, StringBuilder insertCmd, List<DbParameter> paramerList, DbTransaction trans = null);
         /// <summary>
         /// 查询条件 InFunc
         /// </summary>
@@ -83,7 +82,7 @@ namespace DBLayer.Persistence
         /// <param name="parameter"></param>
         /// <param name="paramers"></param>
         /// <returns></returns>
-        StringBuilder GetPageCmdText(DataSource dataSource, string UnionText, string TableName, string FldName, ref int? PageIndex, ref int? PageSize, string Filter, string Group, string Sort, ref DbParameter[] parameter, params DbParameter[] paramers);
+        StringBuilder GetPageCmdText(IDataSource dataSource, string UnionText, string TableName, string FldName, ref int? PageIndex, ref int? PageSize, string Filter, string Group, string Sort, ref DbParameter[] parameter, params DbParameter[] paramers);
 
 
     }

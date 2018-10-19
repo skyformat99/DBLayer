@@ -1,4 +1,5 @@
 ﻿using DBLayer.Core;
+using DBLayer.Core.Interface;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;

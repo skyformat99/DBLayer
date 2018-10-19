@@ -8,6 +8,8 @@ using System;
 using System.Collections.Specialized;
 using DBLayer.Core.Extensions;
 using DBLayer.Core.Interface;
+using DBLayer.Persistence.PagerGenerator;
+using DBLayer.Persistence.Generator;
 
 namespace DbLayer.CoreTest
 {
@@ -75,10 +77,10 @@ namespace DbLayer.CoreTest
                     Properties = new NameValueCollection
                     {
                         { "userid","sa"},
-                        { "password","P@ssw0rd"},
+                        { "password","***"},
                         { "passwordKey",""},
-                        { "database","NNEV"},
-                        { "datasource","192.168.16.122"}
+                        { "database","***"},
+                        { "datasource","127.0.0.1"}
                     },
                     ConnectionToken = "Password=${password};Persist Security Info=True;User ID=${userid};Initial Catalog=${database};Data Source=${datasource};pooling=true;min pool size=5;max pool size=10"
                 },
@@ -188,8 +190,10 @@ namespace DbLayer.CoreTest
         public class SysConfigurationService : AbstractService<SysConfiguration>, ISysConfigurationService
         {
             public SysConfigurationService() { }
-            public SysConfigurationService(IDbProvider dbProvider, IConnectionString connectionString, IGenerator generator, IPagerGenerator pagerGenerator) : base(dbProvider, connectionString, generator, pagerGenerator)
-            { }
+            public SysConfigurationService(IDbContext dbContext):base(dbContext) { }
+            
+            //public SysConfigurationService(IDbProvider dbProvider, IConnectionString connectionString, IGenerator generator, IPagerGenerator pagerGenerator) : base(dbProvider, connectionString, generator, pagerGenerator)
+            //{ }
 
         }
         #endregion

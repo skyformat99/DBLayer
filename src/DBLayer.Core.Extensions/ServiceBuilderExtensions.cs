@@ -26,6 +26,7 @@ namespace DBLayer.Core.Extensions
             services.AddSingleton(options.ConnectionString);
             services.AddSingleton(options.Generator);
             services.AddSingleton(options.PageGenerator);
+            services.AddSingleton<IDbContext, DbContext>();
         }
 
         //public static void AddDBLayer(this IServiceCollection services)

@@ -10,18 +10,16 @@ using System.Threading.Tasks;
 
 namespace DBLayer.Persistence.Data
 {
-    public class DataSource : IDataSource
+    public abstract class DataSource: IDataSource
     {
         private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-        #region 接口
+        
         public IConnectionString ConnectionString { get; set; }
 
         public IDbProvider DbProvider { get; set; }
-        #endregion
 
         public DataSource() { }
-        public DataSource(IDbProvider dbProvider, ConnectionString connectionString)
+        public DataSource(IDbProvider dbProvider, IConnectionString connectionString)
         {
             this.DbProvider = dbProvider;
             this.ConnectionString = connectionString;

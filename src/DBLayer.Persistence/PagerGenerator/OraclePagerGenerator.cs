@@ -1,4 +1,5 @@
 ﻿using DBLayer.Core;
+using DBLayer.Core.Interface;
 using DBLayer.Persistence.Data;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBLayer.Persistence
+namespace DBLayer.Persistence.PagerGenerator
 {
     public class OraclePagerGenerator : IPagerGenerator
     {
@@ -31,7 +32,7 @@ namespace DBLayer.Persistence
         /// <param name="paramerList"></param>
         /// <param name="top"></param>
         /// <returns></returns>
-        public StringBuilder GetSelectCmdText<T>(DataSource dataSource, ref List<DbParameter> paramerList, StringBuilder whereStr, StringBuilder orderStr, int? top = null)
+        public StringBuilder GetSelectCmdText<T>(IDataSource dataSource, ref List<DbParameter> paramerList, StringBuilder whereStr, StringBuilder orderStr, int? top = null)
         {
             var cmdText = new StringBuilder();
             var topStr = new StringBuilder();
@@ -69,7 +70,7 @@ namespace DBLayer.Persistence
         /// <param name="top"></param>
         /// <param name="exclusionList"></param>
         /// <returns></returns>
-        public StringBuilder GetSelectDictionaryCmdText<T>(DataSource dataSource, ref List<DbParameter> paramerList, StringBuilder whereStr, StringBuilder orderStr, int? top = null, params string[] exclusionList)
+        public StringBuilder GetSelectDictionaryCmdText<T>(IDataSource dataSource, ref List<DbParameter> paramerList, StringBuilder whereStr, StringBuilder orderStr, int? top = null, params string[] exclusionList)
         {
             var cmdText = new StringBuilder();
             var topStr = new StringBuilder();
@@ -124,7 +125,7 @@ namespace DBLayer.Persistence
         /// <param name="paramerList">参数列表</param>
         /// <param name="trans">会话</param>
         /// <returns>Id</returns>
-        public object InsertExecutor<T>(DataSource dataSource, StringBuilder insertCmd, List<DbParameter> paramerList, DbTransaction trans = null)
+        public object InsertExecutor<T>(IDataSource dataSource, StringBuilder insertCmd, List<DbParameter> paramerList, DbTransaction trans = null)
         {
             var cmdText = new StringBuilder();
 
@@ -155,7 +156,7 @@ namespace DBLayer.Persistence
         /// <param name="paramerList">参数列表</param>
         /// <param name="trans">会话</param>
         /// <returns>Id</returns>
-        public Task<object> InsertExecutorAsync<T>(DataSource dataSource, StringBuilder insertCmd, List<DbParameter> paramerList, DbTransaction trans = null)
+        public Task<object> InsertExecutorAsync<T>(IDataSource dataSource, StringBuilder insertCmd, List<DbParameter> paramerList, DbTransaction trans = null)
         {
             var cmdText = new StringBuilder();
 
@@ -227,7 +228,7 @@ namespace DBLayer.Persistence
         /// <param name="parameter"></param>
         /// <param name="paramers"></param>
         /// <returns></returns>
-        public StringBuilder GetPageCmdText(DataSource dataSource, string UnionText, string TableName, string FldName, ref int? PageIndex, ref int? PageSize, string Filter, string Group, string Sort, ref DbParameter[] parameter, params DbParameter[] paramers)
+        public StringBuilder GetPageCmdText(IDataSource dataSource, string UnionText, string TableName, string FldName, ref int? PageIndex, ref int? PageSize, string Filter, string Group, string Sort, ref DbParameter[] parameter, params DbParameter[] paramers)
         {
             var cmdText = new StringBuilder();
             var strPageSize = -1;
