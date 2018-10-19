@@ -93,7 +93,12 @@ namespace DBLayer.Persistence.Data
             dbCmd.Connection = trans.Connection;
             dbCmd.CommandText = cmdText;
             dbCmd.CommandType = commandType;
-            dbCmd.Transaction = trans;
+
+            if (trans!=null)
+            {
+                dbCmd.Transaction = trans;
+            }
+
             if (paramers != null)
             {
                 dbCmd.Parameters.AddRange(paramers);
