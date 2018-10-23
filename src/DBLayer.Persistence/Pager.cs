@@ -28,15 +28,13 @@ namespace DBLayer.Persistence
         public string Field { get; set; }
         public string Group { get; set; }
         public string Order { get;set; }
-        public Action<T ,StringBuilder,IList<DbParameter>> WhereAction { get; set; }
+        //public Action<T ,StringBuilder,IList<DbParameter>> WhereAction { get; set; }
+        public Action<StringBuilder, IList<DbParameter>> WhereAction { get; set; }
         public IList<DbParameter> Parameters { get; set; }
 
         public void Execute() 
         {
-            if (WhereAction!=null) 
-            {
-                WhereAction(Condition, Where, Parameters);
-            }
+            WhereAction?.Invoke(Where, Parameters);
         }
     }
     public class Pager<T> : BasePager<T> where T : BasePageCondition, new()

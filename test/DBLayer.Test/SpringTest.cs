@@ -614,22 +614,22 @@ namespace DBLayer.Test
              Table="sys_user",
              Order=string.Empty,
              Field = "*",
-             WhereAction=(Condition,Where,Paramters)=>
+             WhereAction=(Where,Paramters)=>
              {
-                if(!string.IsNullOrEmpty(Condition.UserName))
+                if(!string.IsNullOrEmpty(condition.UserName))
                 {
     	            Where.Append("AND user_name LIKE @user_name ");
-                    Paramters.Add(base.CreateParameter("@user_name",  string.Concat("%", Condition.UserName, "%")));
+                    Paramters.Add(base.CreateParameter("@user_name",  string.Concat("%", condition.UserName, "%")));
                 }
-                if(!string.IsNullOrEmpty(Condition.UserEmail))
+                if(!string.IsNullOrEmpty(condition.UserEmail))
                 {
     	            Where.Append("AND user_email LIKE @user_email ");
-                    Paramters.Add(base.CreateParameter("@user_email",  string.Concat("%", Condition.UserEmail, "%")));
+                    Paramters.Add(base.CreateParameter("@user_email",  string.Concat("%", condition.UserEmail, "%")));
                 }
-                if(!string.IsNullOrEmpty(Condition.UserMobile))
+                if(!string.IsNullOrEmpty(condition.UserMobile))
                 {
     	            Where.Append("AND user_mobile LIKE @user_mobile ");
-                    Paramters.Add(base.CreateParameter("@user_mobile",  string.Concat("%", Condition.UserMobile, "%")));
+                    Paramters.Add(base.CreateParameter("@user_mobile",  string.Concat("%", condition.UserMobile, "%")));
                 }
              }
             };
@@ -657,22 +657,22 @@ namespace DBLayer.Test
                 Table = "alluser",
                 Order = string.Empty,
                 Field = "*",
-                WhereAction = (Condition, Where, Paramters) =>
+                WhereAction = (Where, Paramters) =>
                 {
-                    if (!string.IsNullOrEmpty(Condition.UserName))
+                    if (!string.IsNullOrEmpty(condition.UserName))
                     {
                         Where.Append("AND user_name LIKE @user_name ");
-                        Paramters.Add(base.CreateParameter("@user_name", string.Concat("%", Condition.UserName, "%")));
+                        Paramters.Add(base.CreateParameter("@user_name", string.Concat("%", condition.UserName, "%")));
                     }
-                    if (!string.IsNullOrEmpty(Condition.UserEmail))
+                    if (!string.IsNullOrEmpty(condition.UserEmail))
                     {
                         Where.Append("AND user_email LIKE @user_email ");
-                        Paramters.Add(base.CreateParameter("@user_email", string.Concat("%", Condition.UserEmail, "%")));
+                        Paramters.Add(base.CreateParameter("@user_email", string.Concat("%", condition.UserEmail, "%")));
                     }
-                    if (!string.IsNullOrEmpty(Condition.UserMobile))
+                    if (!string.IsNullOrEmpty(condition.UserMobile))
                     {
                         Where.Append("AND user_mobile LIKE @user_mobile ");
-                        Paramters.Add(base.CreateParameter("@user_mobile", string.Concat("%", Condition.UserMobile, "%")));
+                        Paramters.Add(base.CreateParameter("@user_mobile", string.Concat("%", condition.UserMobile, "%")));
                     }
                 }
             };
@@ -696,12 +696,12 @@ namespace DBLayer.Test
                 Table = "t_d_user",
                 Order = string.Empty,
                 Field = "*",
-                WhereAction = (Condition, Where, Paramters) =>
+                WhereAction = (Where, Paramters) =>
                 {
-                    if (Condition.Id>0)
+                    if (condition.Id>0)
                     {
                         Where.Append("AND ID = :ID ");
-                        Paramters.Add(base.CreateParameter(":ID", Condition.Id));
+                        Paramters.Add(base.CreateParameter(":ID", condition.Id));
                     }
                 }
             };
@@ -729,12 +729,12 @@ namespace DBLayer.Test
                 Table = "alluser",
                 Order = string.Empty,
                 Field = "*",
-                WhereAction = (Condition, Where, Paramters) =>
+                WhereAction = (Where, Paramters) =>
                 {
-                    if (Condition.Id > 0)
+                    if (condition.Id > 0)
                     {
                         Where.Append("AND ID = :ID ");
-                        Paramters.Add(base.CreateParameter(":ID", Condition.Id));
+                        Paramters.Add(base.CreateParameter(":ID", condition.Id));
                     }
                 }
             };
@@ -762,12 +762,12 @@ namespace DBLayer.Test
                 Table = "alluser",
                 Order = string.Empty,
                 Field = "*",
-                WhereAction = (Condition, Where, Paramters) =>
+                WhereAction = (Where, Paramters) =>
                 {
-                    if (Condition.Id > 0)
+                    if (condition.Id > 0)
                     {
                         Where.Append("AND ID = :ID ");
-                        Paramters.Add(base.CreateParameter(":ID", Condition.Id));
+                        Paramters.Add(base.CreateParameter(":ID", condition.Id));
                     }
                 }
             };
@@ -907,82 +907,82 @@ namespace DBLayer.Test
         /// <returns></returns>
         public IEnumerable<ShtSacrifice> Seach(ShtSacrificeCondition.Search condition)
         {
-            var page = new Pager<ShtSacrificeCondition.Search>()
+            var page = new Pager<ShtSacrificeCondition.Search>
             {
                 Condition = condition,
                 Table = "sht_sacrifice a",
                 Order = "a.scfe_createtime DESC",
                 Field = "*",
-                WhereAction = (Condition, Where, Paramters) =>
+                WhereAction = (Where, Paramters) =>
                 {
 
-                    if (!string.IsNullOrWhiteSpace(Condition.ScfeName))
+                    if (!string.IsNullOrWhiteSpace(condition.ScfeName))
                     {
-                        Paramters.Add(base.CreateParameter("@scfe_name", string.Concat("%", Condition.ScfeName, "%")));
+                        Paramters.Add(base.CreateParameter("@scfe_name", string.Concat("%", condition.ScfeName, "%")));
                         Where.Append("AND a.scfe_name LIKE @scfe_name ");
                     }
 
-                    if (!string.IsNullOrWhiteSpace(Condition.ScfeUnitName))
+                    if (!string.IsNullOrWhiteSpace(condition.ScfeUnitName))
                     {
-                        Paramters.Add(base.CreateParameter("@scfe_unit_name", string.Concat("%", Condition.ScfeUnitName, "%")));
+                        Paramters.Add(base.CreateParameter("@scfe_unit_name", string.Concat("%", condition.ScfeUnitName, "%")));
                         Where.Append("AND a.scfe_unit_name LIKE @scfe_unit_name ");
                     }
 
-                    if (Condition.ScfeCateId != null && Condition.ScfeCateId.Value > 0)
+                    if (condition.ScfeCateId != null && condition.ScfeCateId.Value > 0)
                     {
-                        Paramters.Add(base.CreateParameter("@scfe_cate_id", Condition.ScfeCateId.Value));
+                        Paramters.Add(base.CreateParameter("@scfe_cate_id", condition.ScfeCateId.Value));
                         Where.Append("AND a.scfe_cate_id = @scfe_cate_id ");
                     }
 
-                    if (!string.IsNullOrWhiteSpace(Condition.ScfeCateName))
+                    if (!string.IsNullOrWhiteSpace(condition.ScfeCateName))
                     {
-                        Paramters.Add(base.CreateParameter("@scfe_cate_name", string.Concat("%", Condition.ScfeCateName, "%")));
+                        Paramters.Add(base.CreateParameter("@scfe_cate_name", string.Concat("%", condition.ScfeCateName, "%")));
                         Where.Append("AND a.scfe_cate_name LIKE @scfe_cate_name ");
                     }
 
-                    if (!string.IsNullOrWhiteSpace(Condition.ScfeImage))
+                    if (!string.IsNullOrWhiteSpace(condition.ScfeImage))
                     {
-                        Paramters.Add(base.CreateParameter("@scfe_image", string.Concat("%", Condition.ScfeImage, "%")));
+                        Paramters.Add(base.CreateParameter("@scfe_image", string.Concat("%", condition.ScfeImage, "%")));
                         Where.Append("AND a.scfe_image LIKE @scfe_image ");
                     }
 
-                    if (Condition.ScfePrice != null && Condition.ScfePrice.Value > 0)
+                    if (condition.ScfePrice != null && condition.ScfePrice.Value > 0)
                     {
-                        Paramters.Add(base.CreateParameter("@scfe_price", Condition.ScfePrice.Value));
+                        Paramters.Add(base.CreateParameter("@scfe_price", condition.ScfePrice.Value));
                         Where.Append("AND a.scfe_price = @scfe_price ");
                     }
 
-                    if (Condition.ScfeGold != null && Condition.ScfeGold.Value > 0)
+                    if (condition.ScfeGold != null && condition.ScfeGold.Value > 0)
                     {
-                        Paramters.Add(base.CreateParameter("@scfe_gold", Condition.ScfeGold.Value));
+                        Paramters.Add(base.CreateParameter("@scfe_gold", condition.ScfeGold.Value));
                         Where.Append("AND a.scfe_gold = @scfe_gold ");
                     }
 
-                    if (Condition.ScfeStatus != null && Condition.ScfeStatus.Value > 0)
+                    if (condition.ScfeStatus != null && condition.ScfeStatus.Value > 0)
                     {
-                        Paramters.Add(base.CreateParameter("@scfe_status", Condition.ScfeStatus.Value));
+                        Paramters.Add(base.CreateParameter("@scfe_status", condition.ScfeStatus.Value));
                         Where.Append("AND a.scfe_status = @scfe_status ");
                     }
 
-                    if (Condition.ScfeUpdatetimeBegin != null)
+                    if (condition.ScfeUpdatetimeBegin != null)
                     {
-                        Paramters.Add(base.CreateParameter("@scfe_updatetime_begin", Condition.ScfeUpdatetimeBegin.Value.ToString("yyyy-MM-dd HH:mm:ss")));
+                        Paramters.Add(base.CreateParameter("@scfe_updatetime_begin", condition.ScfeUpdatetimeBegin.Value.ToString("yyyy-MM-dd HH:mm:ss")));
                         Where.Append(" AND a.scfe_updatetime >= @scfe_updatetime_begin ");
                     }
-                    if (Condition.ScfeUpdatetimeEnd != null)
+                    if (condition.ScfeUpdatetimeEnd != null)
                     {
-                        Paramters.Add(base.CreateParameter("@scfe_updatetime_end", Condition.ScfeUpdatetimeEnd.Value.ToString("yyyy-MM-dd HH:mm:ss")));
+                        Paramters.Add(base.CreateParameter("@scfe_updatetime_end", condition.ScfeUpdatetimeEnd.Value.ToString("yyyy-MM-dd HH:mm:ss")));
                         Where.Append(" AND a.scfe_updatetime <= @scfe_updatetime_end ");
                     }
 
-                    if (Condition.ScfeCreatetimeBegin != null)
+                    if (condition.ScfeCreatetimeBegin != null)
                     {
-                        Paramters.Add(base.CreateParameter("@scfe_createtime_begin", Condition.ScfeCreatetimeBegin.Value.ToString("yyyy-MM-dd HH:mm:ss")));
+                        Paramters.Add(base.CreateParameter("@scfe_createtime_begin", condition.ScfeCreatetimeBegin.Value.ToString("yyyy-MM-dd HH:mm:ss")));
                         Where.Append(" AND a.scfe_createtime >= @scfe_createtime_begin ");
                     }
-                    if (Condition.ScfeCreatetimeEnd != null)
+                    if (condition.ScfeCreatetimeEnd != null)
                     {
-                        Paramters.Add(base.CreateParameter("@scfe_createtime_end", Condition.ScfeCreatetimeEnd.Value.ToString("yyyy-MM-dd HH:mm:ss")));
+                        Paramters.Add(base.CreateParameter("@scfe_createtime_end", condition.ScfeCreatetimeEnd.Value.ToString("yyyy-MM-dd HH:mm:ss")));
                         Where.Append(" AND a.scfe_createtime <= @scfe_createtime_end ");
                     }
 
