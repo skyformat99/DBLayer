@@ -101,7 +101,7 @@ namespace DBLayer.Persistence.Data
         /// <returns>reader</returns>
         internal DbDataReader CreateDataReader(string cmdText, DbTransaction tran=null, CommandType commandType= CommandType.Text, params DbParameter[] paramers)
         {
-            var reader = CreateCommand(cmdText,tran, commandType, paramers).ExecuteReader();
+            var reader = CreateCommand(cmdText,tran, commandType, paramers).ExecuteReader(CommandBehavior.CloseConnection);
 
             return reader;
         }
@@ -117,7 +117,7 @@ namespace DBLayer.Persistence.Data
         /// <returns>reader</returns>
         internal Task<DbDataReader> CreateDataReaderAsync( string cmdText, DbTransaction tran=null, CommandType commandType=CommandType.Text, params DbParameter[] paramers)
         {
-            var reader = CreateCommand( cmdText, tran, commandType, paramers).ExecuteReaderAsync();
+            var reader = CreateCommand( cmdText, tran, commandType, paramers).ExecuteReaderAsync(CommandBehavior.CloseConnection);
 
             return reader;
         }
