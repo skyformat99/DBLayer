@@ -101,7 +101,10 @@ namespace DBLayer.Persistence.Data
         /// <returns>reader</returns>
         internal DbDataReader CreateDataReader(string cmdText, DbTransaction tran=null, CommandType commandType= CommandType.Text, params DbParameter[] paramers)
         {
-            var reader = CreateCommand(cmdText,tran, commandType, paramers).ExecuteReader(CommandBehavior.CloseConnection);
+            var reader = CreateCommand(cmdText,tran, commandType, paramers)
+                .ExecuteReader(tran==null
+                ? CommandBehavior.Default
+                : CommandBehavior.CloseConnection);
 
             return reader;
         }
@@ -115,9 +118,12 @@ namespace DBLayer.Persistence.Data
         /// <param name="commandType">命令类型</param>
         /// <param name="paramers">参数数组</param>
         /// <returns>reader</returns>
-        internal Task<DbDataReader> CreateDataReaderAsync( string cmdText, DbTransaction tran=null, CommandType commandType=CommandType.Text, params DbParameter[] paramers)
+        internal async Task<DbDataReader> CreateDataReaderAsync( string cmdText, DbTransaction tran=null, CommandType commandType=CommandType.Text, params DbParameter[] paramers)
         {
-            var reader = CreateCommand( cmdText, tran, commandType, paramers).ExecuteReaderAsync(CommandBehavior.CloseConnection);
+            var reader = await CreateCommand( cmdText, tran, commandType, paramers)
+                .ExecuteReaderAsync(tran == null 
+                ? CommandBehavior.Default 
+                : CommandBehavior.CloseConnection);
 
             return reader;
         }
@@ -131,12 +137,21 @@ namespace DBLayer.Persistence.Data
         /// <param name="commmandType">命令类型</param>
         /// <param name="paramers">参数数组</param>
         /// <returns>影响行数</returns>
-        public int ExecuteNonQuery( string cmdText, DbTransaction trans=null, CommandType commandType=CommandType.Text, params DbParameter[] paramers)
+        public int ExecuteNonQuery(string cmdText, DbTransaction trans=null, CommandType commandType=CommandType.Text, params DbParameter[] paramers)
         {
             int retval = -1;
             using (var dbCmd = CreateCommand( cmdText, trans, commandType, paramers))
             {
-                retval = dbCmd.ExecuteNonQuery();
+                if (trans == null)
+                {
+                    using (dbCmd.Connection)
+                    {
+                        retval = dbCmd.ExecuteNonQuery();
+                    }
+                }
+                else {
+                    retval = dbCmd.ExecuteNonQuery();
+                }
             }
             return retval;
         }
@@ -150,12 +165,23 @@ namespace DBLayer.Persistence.Data
         /// <param name="commmandType">命令类型</param>
         /// <param name="paramers">参数数组</param>
         /// <returns>影响行数</returns>
-        public Task<int> ExecuteNonQueryAsync( string cmdText, DbTransaction trans=null, CommandType commandType= CommandType.Text, params DbParameter[] paramers)
+        public async Task<int> ExecuteNonQueryAsync( string cmdText, DbTransaction trans=null, CommandType commandType= CommandType.Text, params DbParameter[] paramers)
         {
-            Task<int> retval = new Task<int>(() => -1);
+            var retval = -1;
             using (var dbCmd = CreateCommand( cmdText, trans, commandType, paramers))
             {
-                retval = dbCmd.ExecuteNonQueryAsync();
+                if (trans == null)
+                {
+                    using (dbCmd.Connection)
+                    {
+                        retval = await dbCmd.ExecuteNonQueryAsync();
+                    }
+                }
+                else
+                {
+                    retval = await dbCmd.ExecuteNonQueryAsync();
+                }
+                
             }
             return retval;
         }
@@ -173,7 +199,17 @@ namespace DBLayer.Persistence.Data
             object retval = null;
             using (var dbCmd = CreateCommand( cmdText, trans, commandType, paramers))
             {
-                retval = dbCmd.ExecuteScalar();
+                if (trans == null)
+                {
+                    using (dbCmd.Connection)
+                    {
+                        retval = dbCmd.ExecuteScalar();
+                    }
+                }
+                else
+                {
+                    retval = dbCmd.ExecuteScalar();
+                }
             }
             return retval;
         }
@@ -186,12 +222,22 @@ namespace DBLayer.Persistence.Data
         /// <param name="commandType">命令类型</param>
         /// <param name="paramers">参数数组</param>
         /// <returns>值</returns>
-        public Task<object> ExecuteScalarAsync( string cmdText, DbTransaction trans=null, CommandType commandType=CommandType.Text, params DbParameter[] paramers)
+        public async Task<object> ExecuteScalarAsync( string cmdText, DbTransaction trans=null, CommandType commandType=CommandType.Text, params DbParameter[] paramers)
         {
-            Task<object> retval = new Task<object>(() => null);
+            object retval = null;
             using (var dbCmd = CreateCommand( cmdText, trans, commandType, paramers))
             {
-                retval = dbCmd.ExecuteScalarAsync();
+                if (trans == null)
+                {
+                    using (dbCmd.Connection)
+                    {
+                        retval = await dbCmd.ExecuteScalarAsync();
+                    }
+                }
+                else
+                {
+                    retval = await dbCmd.ExecuteScalarAsync();
+                }
             }
             return retval;
         }
@@ -209,10 +255,23 @@ namespace DBLayer.Persistence.Data
             var dataSet = new DataSet();
             using (var dbCmd = CreateCommand( cmdText, trans, commandType, paramers))
             {
-                using (var dbDA = DbProvider.GetDbProviderFactory().CreateDataAdapter())
+                if (trans == null)
                 {
-                    dbDA.SelectCommand = dbCmd;
-                    dbDA.Fill(dataSet);
+                    using (dbCmd.Connection)
+                    {
+                        using (var dbDA = DbProvider.GetDbProviderFactory().CreateDataAdapter())
+                        {
+                            dbDA.SelectCommand = dbCmd;
+                            dbDA.Fill(dataSet);
+                        }
+                    }
+                }
+                else {
+                    using (var dbDA = DbProvider.GetDbProviderFactory().CreateDataAdapter())
+                    {
+                        dbDA.SelectCommand = dbCmd;
+                        dbDA.Fill(dataSet);
+                    }
                 }
             }
             return dataSet;
