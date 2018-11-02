@@ -35,10 +35,11 @@ namespace DbLayer.CoreTest
 
             var provider = new DbProvider
             {
-                ProviderName = "System.Data.SqlClient.SqlClientFactory, System.Data.SqlClient",
+                //ProviderName = "System.Data.SqlClient.SqlClientFactory, System.Data.SqlClient",
                 //ProviderName = "MySql.Data.MySqlClient.MySqlClientFactory, MySql.Data",
-                //ProviderName = "Oracle.ManagedDataAccess.Client.OracleClientFactory, Oracle.ManagedDataAccess.Core",
-                ParameterPrefix = "@",
+                ProviderName = "Oracle.ManagedDataAccess.Client.OracleClientFactory, Oracle.ManagedDataAccess.Core",
+                //ParameterPrefix = "@",
+                ParameterPrefix = ":",
                 SelectKey = "SELECT @@IDENTITY;"
             };
             var guidGenerator = new GUIDGenerator();

@@ -41,11 +41,6 @@ For the time being, mild backwards-incompatible changes may be made without chan
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Common.Logging" Version="3.4.1" />
-    <PackageReference Include="Common.Logging.Core" Version="3.4.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\DBLayer.Core\DBLayer.Core.csproj" />
   </ItemGroup>
 

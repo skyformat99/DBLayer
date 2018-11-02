@@ -1,10 +1,6 @@
-﻿using Common.Logging;
-using DBLayer.Core;
-using DBLayer.Core.Interface;
-using System;
+﻿using DBLayer.Core.Interface;
 using System.Data;
 using System.Data.Common;
-using System.Reflection;
 using System.Threading.Tasks;
 
 
@@ -12,7 +8,8 @@ namespace DBLayer.Persistence.Data
 {
     public abstract class DataSource: IDataSource
     {
-        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        //private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         
         public IConnectionString ConnectionString { get; set; }
 
@@ -62,10 +59,10 @@ namespace DBLayer.Persistence.Data
         internal DbCommand CreateCommand(string cmdText, DbTransaction trans=null, CommandType commandType=CommandType.Text, params DbParameter[] paramers)
         {
 
-            if (_logger.IsDebugEnabled)
-            {
-                _logger.Debug(cmdText);
-            }
+            //if (_logger.IsDebugEnabled)
+            //{
+            //    _logger.Debug(cmdText);
+            //}
 
             var dbCmd = DbProvider.GetDbProviderFactory().CreateCommand();
             

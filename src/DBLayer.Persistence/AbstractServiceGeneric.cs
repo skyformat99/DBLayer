@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Data;
-using System.Reflection;
-using System.Data.Common;
-using System.Text;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using Common.Logging;
-using DBLayer.Core;
+﻿using DBLayer.Core;
 using DBLayer.Core.Condition;
 using DBLayer.Core.Interface;
-using DBLayer.Persistence.Data;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 /*------------------------------------------------------------------------------
  * 单元名称：
@@ -26,7 +21,7 @@ namespace DBLayer.Persistence
 {
     public abstract class AbstractService<T> : AbstractService, IAbstractService<T> where T:new()
     {
-        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        //private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         
         public AbstractService():base() { }
         public AbstractService(IDbContext dbContext) : base(dbContext) { }

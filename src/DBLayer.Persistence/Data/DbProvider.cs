@@ -1,8 +1,6 @@
-﻿using Common.Logging;
-using DBLayer.Core.Interface;
+﻿using DBLayer.Core.Interface;
 using System;
 using System.Data.Common;
-using System.Reflection;
 
 namespace DBLayer.Persistence.Data
 {
@@ -11,7 +9,7 @@ namespace DBLayer.Persistence.Data
     /// </summary>
     public class DbProvider : IDbProvider
     {
-        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        //private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private const string SQLPARAMETER = "?";
         #region 接口
         public string ProviderName { get; set; }

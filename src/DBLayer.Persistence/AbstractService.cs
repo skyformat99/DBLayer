@@ -1,5 +1,4 @@
-﻿using Common.Logging;
-using DBLayer.Core;
+﻿using DBLayer.Core;
 using DBLayer.Core.Condition;
 using DBLayer.Core.Interface;
 using DBLayer.Persistence.Data;
@@ -9,7 +8,6 @@ using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,7 +24,7 @@ namespace DBLayer.Persistence
 {
     public abstract class AbstractService : DataSource, IAbstractService
     {
-        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        //private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         #region property
         public IGenerator TheGenerator { get; set; }
@@ -756,7 +754,7 @@ namespace DBLayer.Persistence
             }
             catch (Exception ex)
             {
-                _logger.Error(ex.Message, ex);
+                //_logger.Error(ex.Message, ex);
             }
 
             return single;
@@ -2712,11 +2710,11 @@ namespace DBLayer.Persistence
                 }
                 catch (IndexOutOfRangeException iofex)
                 {
-                    _logger.Error("ForeachDataAddLogError_iofex:" + iofex.Message, iofex);
+                   // _logger.Error("ForeachDataAddLogError_iofex:" + iofex.Message, iofex);
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error("ForeachDataAddLogError:" + ex.Message, ex);
+                    //_logger.Error("ForeachDataAddLogError:" + ex.Message, ex);
                     if (!reader.IsClosed) { reader.Close(); }
                     throw;
                 }
@@ -2748,7 +2746,7 @@ namespace DBLayer.Persistence
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error("ForeachDicAddLogError:" + ex.Message, ex);
+                    //_logger.Error("ForeachDicAddLogError:" + ex.Message, ex);
                     if (!reader.IsClosed) { reader.Close(); }
                     throw;
                 }
@@ -2778,7 +2776,7 @@ namespace DBLayer.Persistence
             }
             catch (Exception ex)
             {
-                _logger.Error("ForeachDicAddLogErrorStr:" + ex.Message, ex);
+                //_logger.Error("ForeachDicAddLogErrorStr:" + ex.Message, ex);
                 if (!reader.IsClosed) { reader.Close(); }
                 throw;
             }
