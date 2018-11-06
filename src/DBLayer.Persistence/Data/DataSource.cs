@@ -100,8 +100,8 @@ namespace DBLayer.Persistence.Data
         {
             var reader = CreateCommand(cmdText,tran, commandType, paramers)
                 .ExecuteReader(tran==null
-                ? CommandBehavior.Default
-                : CommandBehavior.CloseConnection);
+                ? CommandBehavior.CloseConnection
+                : CommandBehavior.Default);
 
             return reader;
         }
@@ -119,8 +119,8 @@ namespace DBLayer.Persistence.Data
         {
             var reader = await CreateCommand( cmdText, tran, commandType, paramers)
                 .ExecuteReaderAsync(tran == null 
-                ? CommandBehavior.Default 
-                : CommandBehavior.CloseConnection);
+                ? CommandBehavior.CloseConnection
+                : CommandBehavior.Default);
 
             return reader;
         }
