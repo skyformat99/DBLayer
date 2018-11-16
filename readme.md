@@ -4,11 +4,42 @@
 #### DBLayer is a orm db access project.
 
 * it's light weight easy to use.
-* with spring.net is a good way to use i recommond use it.
 * automatic generate distribute ID
 * pager code easy to use
 * support sqlserver、oracle、mysql
+* generate draft sql for debug and coding
 
+## ioc code
+```C#
+collection.AddDBLayer(new DBLayerOptions
+{
+ConnectionString = new ConnectionString
+(
+    properties : new NameValueCollection
+    {
+        { "userid","sa"},
+        { "password","***"},
+        { "passwordKey",""},
+        { "database","***"},
+        { "datasource","127.0.0.1"}
+    },
+    connectionToken : "Password=${password};Persist Security Info=True;User ID=${userid};Initial Catalog=${database};Data Source=${datasource};pooling=true;min pool size=5;max pool size=10"
+),
+DbProvider = new DbProvider
+{
+    ProviderName = "System.Data.SqlClient.SqlClientFactory, System.Data.SqlClient",
+    //ProviderName = "MySql.Data.MySqlClient.MySqlClientFactory, MySql.Data",
+    //ProviderName = "Oracle.ManagedDataAccess.Client.OracleClientFactory, Oracle.ManagedDataAccess.Core",
+    //ParameterPrefix = "@",
+    //ParameterPrefix = ":",
+    ParameterPrefix = "@",
+    SelectKey = "SELECT @@IDENTITY;"
+},
+Generator = new GUIDGenerator(),
+PageGenerator = new SqlServerPagerGenerator()
+});
+```
+## service code
 ```C#
 //add a log data to db
 var id = TheService.InsertEntity<SysLog, long>(
@@ -36,22 +67,22 @@ public IEnumerable<SysUser> Seach(SysUserCondition.Search condition)
         Table = "sys_user",
         Order = string.Empty,
         Field = "*",
-        WhereAction = (Condition, Where, Paramters) =>
+        WhereAction = (Where, Paramters) =>
         {
-            if (!string.IsNullOrEmpty(Condition.UserName))
+            if (!string.IsNullOrEmpty(condition.UserName))
             {
                 Where.Append("AND user_name LIKE @user_name ");
-                Paramters.Add(base.CreateParameter("@user_name", string.Concat("%", Condition.UserName, "%")));
+                Paramters.Add(base.CreateParameter("@user_name", string.Concat("%", condition.UserName, "%")));
             }
-            if (!string.IsNullOrEmpty(Condition.UserEmail))
+            if (!string.IsNullOrEmpty(condition.UserEmail))
             {
                 Where.Append("AND user_email LIKE @user_email ");
-                Paramters.Add(base.CreateParameter("@user_email", string.Concat("%", Condition.UserEmail, "%")));
+                Paramters.Add(base.CreateParameter("@user_email", string.Concat("%", condition.UserEmail, "%")));
             }
-            if (!string.IsNullOrEmpty(Condition.UserMobile))
+            if (!string.IsNullOrEmpty(condition.UserMobile))
             {
                 Where.Append("AND user_mobile LIKE @user_mobile ");
-                Paramters.Add(base.CreateParameter("@user_mobile", string.Concat("%", Condition.UserMobile, "%")));
+                Paramters.Add(base.CreateParameter("@user_mobile", string.Concat("%", condition.UserMobile, "%")));
             }
         }
     };
@@ -62,9 +93,7 @@ public IEnumerable<SysUser> Seach(SysUserCondition.Search condition)
 ```
 
 ## plan 
-* Read-write separation
-* simply separate read and write database with power string r1w1
-* when you op cud a timer will run , in timer range,the connection will go to r1 database
+* simplize all code, remove no using code
 
 ## cake cmd
 ```
