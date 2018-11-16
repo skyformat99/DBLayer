@@ -8,7 +8,6 @@ namespace DBLayer.Persistence
 {
     public class ConnectionString: IConnectionString
     {
-        public ConnectionString() { }
         public ConnectionString(NameValueCollection properties,string connectionToken)
         {
             this.Properties = properties;
@@ -22,7 +21,7 @@ namespace DBLayer.Persistence
             get {
                 return _properties;
             }
-            set
+            private set
             {
                 if (value.AllKeys.Contains(PropertyConstants.PASSWORDKEY))
                 {
@@ -38,7 +37,7 @@ namespace DBLayer.Persistence
             }
         }
 
-        public string ConnectionToken { get;set; }
+        public string ConnectionToken { get; }
 
 
         private string _connectionString;

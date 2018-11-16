@@ -5,11 +5,10 @@ using System.Data.Common;
 namespace DBLayer.Persistence.Data
 {
     /// <summary>
-    /// 通用数据库提供类
+    /// Commmon DbProvider
     /// </summary>
     public class DbProvider : IDbProvider
     {
-        //private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private const string SQLPARAMETER = "?";
         #region 接口
         public string ProviderName { get; set; }

@@ -2,6 +2,7 @@
 using DBLayer.Core.Condition;
 using DBLayer.Core.Interface;
 using DBLayer.Persistence.Data;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -24,25 +25,29 @@ namespace DBLayer.Persistence
 {
     public abstract class AbstractService : DataSource, IAbstractService
     {
-        //private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILogger _logger;
+        private readonly IGenerator _generator;
+        private readonly IPagerGenerator _pagerGenerator;
+        
+        public AbstractService(IDbContext dbContext, ILoggerFactory loggerFactory) :
+            this(dbContext.DbProvider, dbContext.ConnectionString, dbContext.Generator, dbContext.PagerGenerator, loggerFactory) { }
 
-        #region property
-        public IGenerator TheGenerator { get; set; }
-        public IPagerGenerator ThePagerGenerator { get; set; }
-        #endregion
-        public AbstractService() { }
-        public AbstractService(IDbContext dbContext):this(dbContext.DbProvider,dbContext.ConnectionString,dbContext.Generator,dbContext.PagerGenerator) { }
-        public AbstractService(IDbProvider dbProvider,IConnectionString connectionString, IGenerator generator, IPagerGenerator pagerGenerator) 
+        public AbstractService(IDbProvider dbProvider,
+            IConnectionString connectionString, 
+            IGenerator generator, 
+            IPagerGenerator pagerGenerator,
+            ILoggerFactory loggerFactory) 
+            : base(dbProvider, connectionString, loggerFactory)
         {
-            base.DbProvider = dbProvider;
-            base.ConnectionString = connectionString;
-            this.TheGenerator = generator;
-            this.ThePagerGenerator = pagerGenerator;
+            _generator = generator;
+            _pagerGenerator = pagerGenerator;
+            _logger = loggerFactory.CreateLogger<AbstractService>();
         }
+
         #region public method
-        
+        public IPagerGenerator PagerGenerator => _pagerGenerator;
         #region GetEntity
-        
+
         /// <summary>
         /// 获取 T 单个实体
         /// </summary>
@@ -55,7 +60,7 @@ namespace DBLayer.Persistence
             var whereStr = this.Where<T>(where, ref paramerList);
             var orderStr = this.Order<T>(order);
 
-            var cmdText=ThePagerGenerator.GetSelectCmdText<T>(this, ref paramerList,whereStr,orderStr,1);
+            var cmdText=_pagerGenerator.GetSelectCmdText<T>(this, ref paramerList,whereStr,orderStr,1);
 
             T entity = GetEntity<T>(cmdText.ToString(), trans, CommandType.Text, paramerList.ToArray());
             return entity;
@@ -140,7 +145,7 @@ namespace DBLayer.Persistence
             var whereStr = this.Where<T>(where, ref paramerList);
             var orderStr = this.Order<T>(order);
 
-            var cmdText = ThePagerGenerator.GetSelectCmdText<T>(this,ref paramerList,whereStr, orderStr,1);
+            var cmdText = _pagerGenerator.GetSelectCmdText<T>(this,ref paramerList,whereStr, orderStr,1);
 
             var entity = await GetEntityAsync<T>(cmdText.ToString(), trans, CommandType.Text, paramerList.ToArray());
             return entity;
@@ -227,7 +232,7 @@ namespace DBLayer.Persistence
             var whereStr = this.Where<T>(where, ref paramerList);
             var orderStr = this.Order<T>(order);
 
-            var cmdText = ThePagerGenerator.GetSelectDictionaryCmdText<T>(this, ref paramerList, whereStr, orderStr, 1);
+            var cmdText = _pagerGenerator.GetSelectDictionaryCmdText<T>(this, ref paramerList, whereStr, orderStr, 1);
 
             var result = GetEntityDic(cmdText.ToString(), trans, CommandType.Text, paramerList.ToArray());
             return result;
@@ -312,7 +317,7 @@ namespace DBLayer.Persistence
             var whereStr = this.Where<T>(where, ref paramerList);
             var orderStr = this.Order<T>(order);
 
-            var cmdText = ThePagerGenerator.GetSelectDictionaryCmdText<T>(this, ref paramerList, whereStr, orderStr, 1);
+            var cmdText = _pagerGenerator.GetSelectDictionaryCmdText<T>(this, ref paramerList, whereStr, orderStr, 1);
 
             var result = await GetEntityDicAsync(cmdText.ToString(), trans, CommandType.Text, paramerList.ToArray());
             return result;
@@ -398,7 +403,7 @@ namespace DBLayer.Persistence
             var whereStr = this.Where<T>(where, ref paramerList);
             var orderStr = this.Order<T>(order);
 
-            var cmdText = ThePagerGenerator.GetSelectDictionaryCmdText<T>(this, ref paramerList, whereStr, orderStr, top, exclusionList);
+            var cmdText = _pagerGenerator.GetSelectDictionaryCmdText<T>(this, ref paramerList, whereStr, orderStr, top, exclusionList);
 
             var result = GetEntityDicList(cmdText.ToString(), trans, CommandType.Text, paramerList.ToArray());
             return result;
@@ -482,7 +487,7 @@ namespace DBLayer.Persistence
             var whereStr = this.Where<T>(where, ref paramerList);
             var orderStr = this.Order<T>(order);
 
-            var cmdText = ThePagerGenerator.GetSelectDictionaryCmdText<T>(this, ref paramerList, whereStr, orderStr, top, exclusionList);
+            var cmdText = _pagerGenerator.GetSelectDictionaryCmdText<T>(this, ref paramerList, whereStr, orderStr, top, exclusionList);
 
             var result = await GetEntityDicListAsync(cmdText.ToString(), trans, CommandType.Text, paramerList.ToArray());
             return result;
@@ -566,7 +571,7 @@ namespace DBLayer.Persistence
             var whereStr = this.Where<T>(where, ref paramerList);
             var orderStr = this.Order<T>(order);
 
-            var cmdText = ThePagerGenerator.GetSelectCmdText<T>(this, ref paramerList, whereStr, orderStr, top);
+            var cmdText = _pagerGenerator.GetSelectCmdText<T>(this, ref paramerList, whereStr, orderStr, top);
 
             var entityList = GetEntityList<T>(cmdText.ToString(), trans, CommandType.Text, paramerList.ToArray());
 
@@ -656,7 +661,7 @@ namespace DBLayer.Persistence
             var whereStr = this.Where<T>(where, ref paramerList);
             var orderStr = this.Order<T>(order);
 
-            var cmdText = ThePagerGenerator.GetSelectCmdText<T>(this, ref paramerList, whereStr, orderStr, top);
+            var cmdText = _pagerGenerator.GetSelectCmdText<T>(this, ref paramerList, whereStr, orderStr, top);
 
             var result = await GetEntityListAsync<T>(cmdText.ToString(), trans, CommandType.Text, paramerList.ToArray());
 
@@ -754,7 +759,7 @@ namespace DBLayer.Persistence
             }
             catch (Exception ex)
             {
-                //_logger.Error(ex.Message, ex);
+                _logger.LogError(ex.Message, ex);
             }
 
             return single;
@@ -912,7 +917,7 @@ namespace DBLayer.Persistence
             var whereStr = this.Where<T>(where, ref paramerList);
             var orderStr = this.Order<T>(order);
 
-            var cmdText = ThePagerGenerator.GetSelectDictionaryCmdText<T>(this, ref paramerList, whereStr, orderStr, 1);
+            var cmdText = _pagerGenerator.GetSelectDictionaryCmdText<T>(this, ref paramerList, whereStr, orderStr, 1);
 
             var result = GetEntityDicStr(cmdText.ToString(),trans,CommandType.Text, paramerList.ToArray());
             return result;
@@ -996,7 +1001,7 @@ namespace DBLayer.Persistence
             var whereStr = this.Where<T>(where, ref paramerList);
             var orderStr = this.Order<T>(order);
 
-            var cmdText = ThePagerGenerator.GetSelectDictionaryCmdText<T>(this, ref paramerList, whereStr, orderStr, 1);
+            var cmdText = _pagerGenerator.GetSelectDictionaryCmdText<T>(this, ref paramerList, whereStr, orderStr, 1);
 
             var result = await GetEntityDicStrAsync(cmdText.ToString(), trans, CommandType.Text, paramerList.ToArray());
             return result;
@@ -1085,7 +1090,7 @@ namespace DBLayer.Persistence
             var whereStr = this.Where<T>(where, ref paramerList);
             var orderStr = this.Order<T>(order);
 
-            var cmdText = ThePagerGenerator.GetSelectDictionaryCmdText<T>(this, ref paramerList, whereStr, orderStr, top, exclusionList);
+            var cmdText = _pagerGenerator.GetSelectDictionaryCmdText<T>(this, ref paramerList, whereStr, orderStr, top, exclusionList);
 
             var result = GetEntityDicStrList(cmdText.ToString(),trans,CommandType.Text, paramerList.ToArray());
             return result;
@@ -1167,7 +1172,7 @@ namespace DBLayer.Persistence
             var whereStr = this.Where<T>(where, ref paramerList);
             var orderStr = this.Order<T>(order);
 
-            var cmdText = ThePagerGenerator.GetSelectDictionaryCmdText<T>(this, ref paramerList, whereStr, orderStr, top, exclusionList);
+            var cmdText = _pagerGenerator.GetSelectDictionaryCmdText<T>(this, ref paramerList, whereStr, orderStr, top, exclusionList);
 
             var result = await GetEntityDicStrListAsync(cmdText.ToString(), trans, CommandType.Text, paramerList.ToArray());
             return result;
@@ -1252,7 +1257,7 @@ namespace DBLayer.Persistence
         {
             object newID = null;
             var paramerList = new List<DbParameter>();
-            var insertStr = this.Insert<T>(expression, ref newID, ref paramerList, TheGenerator);
+            var insertStr = this.Insert<T>(expression, ref newID, ref paramerList, _generator);
             var allInsert = CreateInsertAllSql<T>();
             var cmdText = new StringBuilder();
 
@@ -1261,7 +1266,7 @@ namespace DBLayer.Persistence
             if (newID == null)
             {
                 //var cmdText = ThePagerGenerator.GetInsertCmdText<T>(this, ref paramerList, insertCmd);
-                newID = ThePagerGenerator.InsertExecutor<T>(this, cmdText, paramerList, trans);
+                newID = _pagerGenerator.InsertExecutor<T>(this, cmdText, paramerList, trans);
                 //newID = trans == null ?
                 //    base.ExecuteScalar(cmdText.ToString(), CommandType.Text, paramerList.ToArray()) :
                 //    base.ExecuteScalar(trans, cmdText.ToString(), CommandType.Text, paramerList.ToArray());
@@ -1304,7 +1309,7 @@ namespace DBLayer.Persistence
             var para = paramerList.ToArray();
             if (newID == null)
             {
-                return ThePagerGenerator.InsertExecutor<T>(this, cmdText, paramerList, trans);
+                return _pagerGenerator.InsertExecutor<T>(this, cmdText, paramerList, trans);
             }
 
             var retval = base.ExecuteNonQuery(cmdText.ToString(), trans, CommandType.Text, para);
@@ -1336,7 +1341,7 @@ namespace DBLayer.Persistence
         {
             object newID = null;
             var paramerList = new List<DbParameter>();
-            var insertStr = this.Insert<T>(expression, ref newID, ref paramerList, TheGenerator);
+            var insertStr = this.Insert<T>(expression, ref newID, ref paramerList, _generator);
             var allInsert = CreateInsertAllSql<T>();
 
             var insertCmd = new StringBuilder();
@@ -1344,7 +1349,7 @@ namespace DBLayer.Persistence
 
             if (newID == null)
             {
-                return await ThePagerGenerator.InsertExecutorAsync<T>(this, insertCmd, paramerList, trans);
+                return await _pagerGenerator.InsertExecutorAsync<T>(this, insertCmd, paramerList, trans);
             }
             
             var cmdText = insertCmd.ToString();
@@ -1392,7 +1397,7 @@ namespace DBLayer.Persistence
 
             if (newID == null)
             {
-                return await ThePagerGenerator.InsertExecutorAsync<T>(this, insertCmd, paramerList, trans);
+                return await _pagerGenerator.InsertExecutorAsync<T>(this, insertCmd, paramerList, trans);
             }
 
             var retval = await base.ExecuteNonQueryAsync(insertCmd.ToString(), trans, CommandType.Text, para);
@@ -2013,7 +2018,7 @@ namespace DBLayer.Persistence
         /// <returns></returns>
         private string GetPageCmdText(string UnionText,string TableName, string FldName,ref int? PageIndex,ref int? PageSize, string Filter, string Group, string Sort, ref DbParameter[] parameter, params DbParameter[] paramers)
         {
-            var cmdText = ThePagerGenerator.GetPageCmdText(this, UnionText,TableName, FldName,ref PageIndex,ref PageSize,Filter, Group,Sort,ref parameter,paramers);
+            var cmdText = _pagerGenerator.GetPageCmdText(this, UnionText,TableName, FldName,ref PageIndex,ref PageSize,Filter, Group,Sort,ref parameter,paramers);
             var result = ReplaceParameter(cmdText.ToString());
             return result;
         }
@@ -2305,7 +2310,7 @@ namespace DBLayer.Persistence
                 {
                     if (da.IsKey && da.IsAuto && da.KeyType == KeyType.SEQ)
                     {
-                        ThePagerGenerator.ProcessInsertId<T>(fieldName, ref sqlFields, ref sqlValues);
+                        _pagerGenerator.ProcessInsertId<T>(fieldName, ref sqlFields, ref sqlValues);
                         continue;
                     }
                     else if (da.IsKey && da.IsAuto && da.KeyType != KeyType.SEQ)
@@ -2319,7 +2324,7 @@ namespace DBLayer.Persistence
                                 var currentLongId = GetSingle<long>(genOval);
                                 if (currentLongId <= 0)
                                 {
-                                    genOval = TheGenerator.Generate();
+                                    genOval = _generator.Generate();
                                 }
                             }
                             catch
@@ -2328,7 +2333,7 @@ namespace DBLayer.Persistence
                         }
                         else
                         {
-                            genOval = TheGenerator.Generate();
+                            genOval = _generator.Generate();
                         }
 
                         newID = genOval;
@@ -2710,13 +2715,13 @@ namespace DBLayer.Persistence
                 }
                 catch (IndexOutOfRangeException iofex)
                 {
-                   // _logger.Error("ForeachDataAddLogError_iofex:" + iofex.Message, iofex);
+                   _logger.LogError("ForeachDataAddLogError_iofex:" + iofex.Message, iofex);
                 }
                 catch (Exception ex)
                 {
-                    //_logger.Error("ForeachDataAddLogError:" + ex.Message, ex);
+                    _logger.LogError("ForeachDataAddLogError:" + ex.Message, ex);
                     if (!reader.IsClosed) { reader.Close(); }
-                    throw;
+                    throw ex;
                 }
             }
         }
@@ -2746,9 +2751,9 @@ namespace DBLayer.Persistence
                 }
                 catch (Exception ex)
                 {
-                    //_logger.Error("ForeachDicAddLogError:" + ex.Message, ex);
+                    _logger.LogError("ForeachDicAddLogError:" + ex.Message, ex);
                     if (!reader.IsClosed) { reader.Close(); }
-                    throw;
+                    throw ex;
                 }
         }
 
@@ -2776,9 +2781,9 @@ namespace DBLayer.Persistence
             }
             catch (Exception ex)
             {
-                //_logger.Error("ForeachDicAddLogErrorStr:" + ex.Message, ex);
+                _logger.LogError("ForeachDicAddLogErrorStr:" + ex.Message, ex);
                 if (!reader.IsClosed) { reader.Close(); }
-                throw;
+                throw ex;
             }
         }
         #endregion

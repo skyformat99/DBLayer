@@ -1,6 +1,7 @@
 ﻿using DBLayer.Core;
 using DBLayer.Core.Condition;
 using DBLayer.Core.Interface;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,25 +9,21 @@ using System.Data.Common;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-/*------------------------------------------------------------------------------
- * 单元名称：
- * 单元描述： 
- * 创 建 人：wutao
- * 创建日期：2011-11-19
- * 修改日志
- * 修 改 人   修改日期    修改内容
- * 
- * ----------------------------------------------------------------------------*/
 namespace DBLayer.Persistence
 {
     public abstract class AbstractService<T> : AbstractService, IAbstractService<T> where T:new()
     {
-        //private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        
-        public AbstractService():base() { }
-        public AbstractService(IDbContext dbContext) : base(dbContext) { }
-        public AbstractService(IDbProvider dbProvider, IConnectionString connectionString, IGenerator generator, IPagerGenerator pagerGenerator) 
-            :base(dbProvider, connectionString, generator, pagerGenerator) {}
+
+        private readonly ILogger _logger;
+
+        public AbstractService(IDbContext dbContext,ILoggerFactory loggerFactory) 
+            : this(dbContext.DbProvider, dbContext.ConnectionString, dbContext.Generator, dbContext.PagerGenerator, loggerFactory){}
+
+        public AbstractService(IDbProvider dbProvider, IConnectionString connectionString, IGenerator generator, IPagerGenerator pagerGenerator, ILoggerFactory loggerFactory) 
+            :base(dbProvider, connectionString, generator, pagerGenerator, loggerFactory)
+        {
+            _logger = loggerFactory.CreateLogger<AbstractService<T>>();
+        }
 
         #region public method
         
@@ -773,27 +770,17 @@ namespace DBLayer.Persistence
         }
         #endregion
 
-        
-
         #endregion
-        
-        #region 分页
 
         #region pager
-    
-
-        #region pager result list
-        
-        
         /// <summary>
         /// 返回分页实体列表集合
         /// </summary>
         /// <returns></returns>
         public IEnumerable<T> GetResultByPager<T1>(Pager<T1> page)
-            
             where T1 : BasePageCondition, new()
         {
-            var result = GetResultByPager<T,T1>(page);
+            var result = GetResultByPager<T, T1>(page);
             return result;
         }
 
@@ -805,19 +792,11 @@ namespace DBLayer.Persistence
         /// <param name="page"></param>
         /// <returns></returns>
         public async Task<IEnumerable<T>> GetResultByPageAsync<T1>(Pager<T1> page)
-            
             where T1 : BasePageCondition, new()
         {
             var result = await GetResultByPageAsync<T, T1>(page);
             return result;
         }
-
-        
-        #endregion
-        #endregion
-
-
-
         #endregion
 
     }

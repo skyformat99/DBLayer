@@ -28,45 +28,5 @@ namespace DBLayer.Core.Extensions
             services.AddSingleton(options.PageGenerator);
             services.AddSingleton<IDbContext, DbContext>();
         }
-
-        //public static void AddDBLayer(this IServiceCollection services)
-        //{
-        //    var connectionString = new ConnectionString
-        //    {
-        //        Properties = new NameValueCollection
-        //        {
-        //            { "userid","sa"},
-        //            { "password","P@ssw0rd"},
-        //            { "passwordKey",""},
-        //            { "database","NNEV"},
-        //            { "datasource","192.168.16.122"}
-        //        },
-        //        ConnectionToken = "Password=${password};Persist Security Info=True;User ID=${userid};Initial Catalog=${database};Data Source=${datasource};pooling=true;min pool size=5;max pool size=10"
-        //    };
-
-        //    //data source=192.168.16.122;initial catalog=NNEV;persist security info=True;user id=sa;password=P@ssw0rd;
-
-        //    var provider = new DbProvider
-        //    {
-        //        ProviderName = "System.Data.SqlClient.SqlClientFactory, System.Data.SqlClient",
-        //        ParameterPrefix = "@",
-        //        SelectKey = "SELECT @@IDENTITY;"
-        //    };
-
-
-        //    var guidGenerator = new GUIDGenerator();
-        //    var sqlServerPagerGenerator = new SqlServerPagerGenerator();
-        //    var datasource = new DataSource(provider, connectionString);
-
-
-        //    var service = new SysLogService
-        //    {
-        //        TheGenerator = guidGenerator,
-        //        ThePagerGenerator = sqlServerPagerGenerator,
-        //        DbProvider = provider,
-        //        ConnectionString = connectionString
-        //    };
-
-        //}
     }
 }

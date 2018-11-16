@@ -1,6 +1,8 @@
 ﻿using DBLayer.Core;
 using DBLayer.Core.Condition;
+using DBLayer.Core.Interface;
 using DBLayer.Persistence;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Spring.Context.Support;
 using System;
@@ -292,7 +294,8 @@ namespace DBLayer.Test
     #region Service
     public class SysLogService : AbstractService
     {
-
+        public SysLogService(IDbContext dbContext, ILoggerFactory loggerFactory)
+               : base(dbContext, loggerFactory) { }
     }
     #endregion
     #endregion
@@ -359,6 +362,8 @@ namespace DBLayer.Test
     #region Service
     public class DynamicChanelService : AbstractService
     {
+        public DynamicChanelService(IDbContext dbContext,ILoggerFactory loggerFactory)
+            :base(dbContext, loggerFactory) { }
 
     }
     #endregion
@@ -397,6 +402,8 @@ namespace DBLayer.Test
     #region Service
     public class OptionService : AbstractService
     {
+        public OptionService(IDbContext dbContext, ILoggerFactory loggerFactory)
+               : base(dbContext, loggerFactory) { }
 
     }
     #endregion
@@ -601,7 +608,8 @@ namespace DBLayer.Test
 
     public class SysUserService : AbstractService 
     {
-     
+        public SysUserService(IDbContext dbContext, ILoggerFactory loggerFactory)
+                  : base(dbContext, loggerFactory) { }
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -683,6 +691,8 @@ namespace DBLayer.Test
     }
     public class OracleUserService : AbstractService
     {
+        public OracleUserService(IDbContext dbContext, ILoggerFactory loggerFactory)
+                 : base(dbContext, loggerFactory) { }
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -745,6 +755,8 @@ namespace DBLayer.Test
     }
     public class MySqlUserService : AbstractService
     {
+        public MySqlUserService(IDbContext dbContext, ILoggerFactory loggerFactory)
+                 : base(dbContext, loggerFactory) { }
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -900,6 +912,8 @@ namespace DBLayer.Test
     }
     public class ShtSacrificeService : AbstractService
     {
+        public ShtSacrificeService(IDbContext dbContext, ILoggerFactory loggerFactory)
+                 : base(dbContext, loggerFactory) { }
         /// <summary>
         /// 分页查询
         /// </summary>

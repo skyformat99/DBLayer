@@ -10,6 +10,8 @@ using DBLayer.Core.Extensions;
 using DBLayer.Core.Interface;
 using DBLayer.Persistence.PagerGenerator;
 using DBLayer.Persistence.Generator;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 
 namespace DbLayer.CoreTest
 {
@@ -20,24 +22,24 @@ namespace DbLayer.CoreTest
         public void TestMethod1()
         {
             var connectionString = new ConnectionString
-            {
-                Properties = new NameValueCollection
-                    {
-                        { "userid","sa"},
-                        { "password","P@ssw0rd"},
-                        { "passwordKey",""},
-                        { "database","NNEV"},
-                        { "datasource","192.168.16.122"}
-                    },
-                ConnectionToken = "Password=${password};Persist Security Info=True;User ID=${userid};Initial Catalog=${database};Data Source=${datasource};pooling=true;min pool size=5;max pool size=10"
-            };
+                (
+                    properties: new NameValueCollection
+                        {
+                            { "userid","sa"},
+                            { "password","eq123!@#"},
+                            { "passwordKey",""},
+                            { "database","JAC"},
+                            { "datasource","192.168.1.200"}
+                        },
+                    connectionToken: "Password=${password};Persist Security Info=True;User ID=${userid};Initial Catalog=${database};Data Source=${datasource};pooling=true;min pool size=5;max pool size=10"
+                );
             //data source=192.168.16.122;initial catalog=NNEV;persist security info=True;user id=sa;password=P@ssw0rd;
 
             var provider = new DbProvider
             {
-                //ProviderName = "System.Data.SqlClient.SqlClientFactory, System.Data.SqlClient",
+                ProviderName = "System.Data.SqlClient.SqlClientFactory, System.Data.SqlClient",
                 //ProviderName = "MySql.Data.MySqlClient.MySqlClientFactory, MySql.Data",
-                ProviderName = "Oracle.ManagedDataAccess.Client.OracleClientFactory, Oracle.ManagedDataAccess.Core",
+                //ProviderName = "Oracle.ManagedDataAccess.Client.OracleClientFactory, Oracle.ManagedDataAccess.Core",
                 //ParameterPrefix = "@",
                 ParameterPrefix = ":",
                 SelectKey = "SELECT @@IDENTITY;"
@@ -45,15 +47,18 @@ namespace DbLayer.CoreTest
             var guidGenerator = new GUIDGenerator();
             var sqlServerPagerGenerator = new SqlServerPagerGenerator();
 
+            var dbContext = new DbContext
+                (
+                    dbProvider: provider, 
+                    connectionString: connectionString,
+                    generator: guidGenerator, 
+                    pagerGenerator: sqlServerPagerGenerator
+                );
 
+            var loggerFactory = new LoggerFactory();
+            loggerFactory.AddConsole();
 
-            var service = new SysConfigurationService
-            {
-                TheGenerator = guidGenerator,
-                ThePagerGenerator = sqlServerPagerGenerator,
-                DbProvider = provider,
-                ConnectionString = connectionString
-            };
+            var service = new SysConfigurationService(dbContext, loggerFactory);
             
             var list = service.GetEntityList(w => w.Category == "aviOperation");
 
@@ -74,17 +79,22 @@ namespace DbLayer.CoreTest
             collection.AddDBLayer(new DBLayerOptions
             {
                 ConnectionString = new ConnectionString
-                {
-                    Properties = new NameValueCollection
+                (
+                    properties : new NameValueCollection
                     {
+                        //{ "userid","sa"},
+                        //{ "password","***"},
+                        //{ "passwordKey",""},
+                        //{ "database","***"},
+                        //{ "datasource","127.0.0.1"}
                         { "userid","sa"},
-                        { "password","***"},
+                        { "password","eq123!@#"},
                         { "passwordKey",""},
-                        { "database","***"},
-                        { "datasource","127.0.0.1"}
+                        { "database","JAC"},
+                        { "datasource","192.168.1.200"}
                     },
-                    ConnectionToken = "Password=${password};Persist Security Info=True;User ID=${userid};Initial Catalog=${database};Data Source=${datasource};pooling=true;min pool size=5;max pool size=10"
-                },
+                    connectionToken : "Password=${password};Persist Security Info=True;User ID=${userid};Initial Catalog=${database};Data Source=${datasource};pooling=true;min pool size=5;max pool size=10"
+                ),
                 DbProvider = new DbProvider
                 {
                     ProviderName = "System.Data.SqlClient.SqlClientFactory, System.Data.SqlClient",
@@ -94,6 +104,14 @@ namespace DbLayer.CoreTest
                 Generator = new GUIDGenerator(),
                 PageGenerator = new SqlServerPagerGenerator()
 
+            });
+
+            
+            collection.AddLogging((loggerBuilder)=>
+            {
+                loggerBuilder.ClearProviders();
+                loggerBuilder.SetMinimumLevel(LogLevel.Debug);
+                loggerBuilder.AddConsole();
             });
 
             collection.AddTransient<ISysConfigurationService, SysConfigurationService>();
@@ -190,12 +208,8 @@ namespace DbLayer.CoreTest
         public interface ISysConfigurationService: IAbstractService<SysConfiguration> { }
         public class SysConfigurationService : AbstractService<SysConfiguration>, ISysConfigurationService
         {
-            public SysConfigurationService() { }
-            public SysConfigurationService(IDbContext dbContext):base(dbContext) { }
+            public SysConfigurationService(IDbContext dbContext, ILoggerFactory loggerFactory):base(dbContext, loggerFactory) { }
             
-            //public SysConfigurationService(IDbProvider dbProvider, IConnectionString connectionString, IGenerator generator, IPagerGenerator pagerGenerator) : base(dbProvider, connectionString, generator, pagerGenerator)
-            //{ }
-
         }
         #endregion
         #endregion

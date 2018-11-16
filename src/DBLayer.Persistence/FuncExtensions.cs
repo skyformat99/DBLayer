@@ -166,7 +166,7 @@ namespace DBLayer.Persistence
                     var leftString=ExpressionRouter(dataSource, mce.Arguments[0], DirAway.Left, ref index, ref paramerList); 
                     var rightString=ExpressionRouter(dataSource, mce.Arguments[1], DirAway.Right, ref index, ref paramerList, true);
 
-                    var infunc = dataSource.ThePagerGenerator.GetInFunc(() => 
+                    var infunc = dataSource.PagerGenerator.GetInFunc(() => 
                     { 
                         return leftString;
                     }, () => 
@@ -181,7 +181,7 @@ namespace DBLayer.Persistence
                     var leftString = ExpressionRouter(dataSource, mce.Arguments[0], DirAway.Left, ref index, ref paramerList);
                     var rightString = ExpressionRouter(dataSource, mce.Arguments[1], DirAway.Right, ref index, ref paramerList, true);
 
-                    var infunc = dataSource.ThePagerGenerator.GetNotInFunc(() =>
+                    var infunc = dataSource.PagerGenerator.GetNotInFunc(() =>
                     {
                         return leftString;
                     }, () =>
@@ -582,7 +582,7 @@ namespace DBLayer.Persistence
                         {
                             if (keyType == KeyType.SEQ)
                             {
-                                dataSource.ThePagerGenerator.ProcessInsertId<T>(fieldName, ref sbField, ref sbValue);
+                                dataSource.PagerGenerator.ProcessInsertId<T>(fieldName, ref sbField, ref sbValue);
                                 continue;
                             }
                             else {

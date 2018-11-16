@@ -9,9 +9,9 @@ namespace DBLayer.Core.Interface
 {
     public interface IDataSource
     {
-        IConnectionString ConnectionString { get; set; }
+        IConnectionString ConnectionString { get; }
 
-        IDbProvider DbProvider { get; set; }
+        IDbProvider DbProvider { get; }
         
 
         #region 连接命令

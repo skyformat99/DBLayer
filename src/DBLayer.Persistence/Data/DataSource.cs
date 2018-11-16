@@ -1,4 +1,5 @@
 ﻿using DBLayer.Core.Interface;
+using Microsoft.Extensions.Logging;
 using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
@@ -8,18 +9,15 @@ namespace DBLayer.Persistence.Data
 {
     public abstract class DataSource: IDataSource
     {
-        //private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILogger _logger;
+        public IConnectionString ConnectionString { get; }
+        public IDbProvider DbProvider { get; }
 
-        
-        public IConnectionString ConnectionString { get; set; }
-
-        public IDbProvider DbProvider { get; set; }
-
-        public DataSource() { }
-        public DataSource(IDbProvider dbProvider, IConnectionString connectionString)
+        public DataSource(IDbProvider dbProvider, IConnectionString connectionString, ILoggerFactory loggerFactory)
         {
-            this.DbProvider = dbProvider;
-            this.ConnectionString = connectionString;
+            DbProvider = dbProvider;
+            ConnectionString = connectionString;
+            _logger = loggerFactory.CreateLogger<DataSource>();
         }
 
         #region 连接命令
@@ -58,11 +56,7 @@ namespace DBLayer.Persistence.Data
         /// <returns>command</returns>
         internal DbCommand CreateCommand(string cmdText, DbTransaction trans=null, CommandType commandType=CommandType.Text, params DbParameter[] paramers)
         {
-
-            //if (_logger.IsDebugEnabled)
-            //{
-            //    _logger.Debug(cmdText);
-            //}
+            _logger.LogSQL(cmdText, paramers);
 
             var dbCmd = DbProvider.GetDbProviderFactory().CreateCommand();
             
@@ -435,9 +429,11 @@ namespace DBLayer.Persistence.Data
         #region 过滤sql 支持 #参数
         protected string ReplaceParameter(string cmdText)
         {
-            cmdText = cmdText?.Replace("#", this.DbProvider.ParameterPrefix);
+            cmdText = cmdText?.Replace("@", this.DbProvider.ParameterPrefix);
             return cmdText;
         }
         #endregion
     }
+
+   
 }

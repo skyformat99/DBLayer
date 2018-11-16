@@ -7,8 +7,8 @@ namespace DBLayer.Core.Interface
 {
     public interface IConnectionString
     {
-        NameValueCollection Properties { get; set; }
-        string ConnectionToken { get; set; }
+        NameValueCollection Properties { get;}
+        string ConnectionToken { get; }
         string ConnectionValue { get; }
     }
 }
