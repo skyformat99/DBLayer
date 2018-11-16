@@ -110,7 +110,7 @@ namespace DBLayer.Persistence.Data
 
         public static void LogSQL(this ILogger _logger, string cmdText, params DbParameter[] parameters)
         {
-            if (_logger.IsEnabled(LogLevel.Debug))
+            if (_logger.IsEnabled(LogLevel.Information))
             {
                 var log = GetDraftSql(cmdText, parameters);
                 _logger.LogDebug(log);
